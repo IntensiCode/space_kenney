@@ -20,7 +20,7 @@ mixin ScriptFunctions on Component {
 
   final dialogOffsets = <String, double>{};
 
-  final _handles = <String, dynamic>{};
+  final knownComponents = <String, dynamic>{};
 
   void clearByType(List types) {
     dialogPosition = 8;
@@ -58,7 +58,7 @@ mixin ScriptFunctions on Component {
     Anchor? anchor,
   }) async {
     final it = await loadSprite(filename, position: position, anchor: anchor);
-    _handles[filename] = it;
+    knownComponents[filename] = it;
     add(it);
     return it;
   }
@@ -73,7 +73,7 @@ mixin ScriptFunctions on Component {
 
   void fadeOutByFilename(List<String> filenames) {
     for (final it in filenames) {
-      final target = _handles[it] as Component?;
+      final target = knownComponents[it] as Component?;
       target?.fadeOut();
       target?.add(RemoveEffect(delay: 1));
     }
@@ -96,7 +96,7 @@ mixin ScriptFunctions on Component {
       anchor: anchor,
       onTap: onTap ?? (_) => {},
     );
-    _handles[text] = it;
+    knownComponents[text] = it;
     add(it);
     return it;
   }
