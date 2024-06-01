@@ -1,3 +1,5 @@
+import 'package:dart_minilog/dart_minilog.dart';
+
 import 'common.dart';
 
 typedef Event = (String, dynamic);
@@ -5,6 +7,7 @@ typedef Event = (String, dynamic);
 final _listeners = <void Function(Event)>[];
 
 void showScreen(Screen screen) {
+  logInfo('showScreen $screen');
   _listeners.forEach((it) => it(('screen', screen)));
 }
 
