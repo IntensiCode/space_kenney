@@ -86,8 +86,9 @@ extension TiledObjectExtensions on TiledObject {
 }
 
 extension ComponentExtensions on Component {
-  void fadeIn([double seconds = 0.4]) {
+  void fadeIn({double seconds = 0.4, bool restart = true}) {
     if (this case OpacityProvider it) {
+      if (it.opacity == 1 && !restart) return;
       it.opacity = 0;
     } else {
       throw ArgumentError('Component has to be an OpacityProvider');
@@ -116,4 +117,8 @@ extension ComponentExtensions on Component {
   void _doAt(int millis, Function() what) {
     Future.delayed(Duration(milliseconds: millis)).then((_) => what());
   }
+}
+
+extension DynamicListExtensions on List<dynamic> {
+  List<T> mapToType<T>() => map((it) => it as T).toList();
 }
