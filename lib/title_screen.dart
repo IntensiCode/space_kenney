@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'core/common.dart';
 import 'core/events.dart';
-import 'story/pico_script_component.dart';
+import 'story/loco_script_component.dart';
 
 class TitleScreen extends Component with KeyboardHandler, TapCallbacks {
   @override
@@ -23,7 +23,7 @@ class TitleScreen extends Component with KeyboardHandler, TapCallbacks {
 
   @override
   onLoad() async {
-    add(PicoScriptComponent('''
+    add(LocoScriptComponent('''
       (0.0 (music 'music_title.mp3'))
       (0.0 (fadeIn (image 'title_background.png')))
       (0.1 (fadeIn (image 'title.png' 160 5 Anchor.topCenter)))
