@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:dart_minilog/dart_minilog.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -63,7 +65,14 @@ class NinePatchImage {
 
   final paint = pixelArtLayerPaint();
 
-  draw(Canvas canvas, double left, double top, double width, double height) {
+  draw(
+    Canvas canvas,
+    double left,
+    double top,
+    double width,
+    double height, [
+    Paint? paint,
+  ]) {
     if (width ~/ cornerSize * cornerSize != width) {
       throw ArgumentError('must be multiple of $cornerSize: $width');
     }
@@ -104,7 +113,7 @@ class NinePatchImage {
         final xx = left + x * cornerSize;
         dst = Rect.fromLTWH(xx, yy, _size, _size);
 
-        canvas.drawImageRect(image, src, dst, paint);
+        canvas.drawImageRect(image, src, dst, paint ?? this.paint);
       }
     }
   }

@@ -24,10 +24,10 @@ class BitmapButton extends PositionComponent
     Image? bgNinePatch,
     required this.text,
     this.cornerSize = 8,
-    required Vector2 position,
+    Vector2? position,
     Vector2? size,
     BitmapFont? font,
-    Anchor anchor = Anchor.center,
+    Anchor? anchor,
     this.shortcuts = const [],
     this.fontScale = 1,
     Color? tint,
@@ -36,7 +36,7 @@ class BitmapButton extends PositionComponent
         background = bgNinePatch != null
             ? NinePatchImage(bgNinePatch, cornerSize: cornerSize)
             : null {
-    this.position = position;
+    if (position != null) this.position.setFrom(position);
     if (tint != null) {
       this.tint(tint);
     }
@@ -50,15 +50,16 @@ class BitmapButton extends PositionComponent
     } else {
       this.size = size;
     }
-    final x = anchor.x * this.size.x;
-    final y = anchor.y * this.size.y;
+    final a = anchor ?? Anchor.center;
+    final x = a.x * this.size.x;
+    final y = a.y * this.size.y;
     this.position.x -= x;
     this.position.y -= y;
   }
 
   @override
   render(Canvas canvas) {
-    background?.draw(canvas, 0, 0, size.x, size.y);
+    background?.draw(canvas, 0, 0, size.x, size.y, paint);
 
     font.scale = fontScale;
     font.paint.color = paint.color;
