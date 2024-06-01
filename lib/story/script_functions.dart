@@ -4,11 +4,14 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame_audio/flame_audio.dart';
+import 'package:flutter/animation.dart';
 
 import '../components/press_fire_to_start.dart';
 import '../core/common.dart';
 import '../core/soundboard.dart';
 import '../util/bitmap_button.dart';
+import '../util/bitmap_font.dart';
+import '../util/bitmap_text.dart';
 import '../util/extensions.dart';
 import '../util/fonts.dart';
 import '../util/loading.dart';
@@ -24,9 +27,7 @@ mixin ScriptFunctions on Component {
 
   void clearByType(List types) {
     dialogPosition = 8;
-    final what = types.isEmpty
-        ? children
-        : children.where((it) => types.contains(it.runtimeType));
+    final what = types.isEmpty ? children : children.where((it) => types.contains(it.runtimeType));
     removeAll(what);
   }
 
@@ -52,6 +53,14 @@ mixin ScriptFunctions on Component {
 
   double _nextPortraitOffset() => (dialogOffsets.length + 1) * 8;
 
+  BitmapFont? font;
+  double? fontScale;
+
+  setFont(BitmapFont? font, {double? scale = 1}) {
+    this.font = font;
+    fontScale = scale;
+  }
+
   Future<SpriteComponent> image({
     required String filename,
     Vector2? position,
@@ -63,12 +72,20 @@ mixin ScriptFunctions on Component {
     return it;
   }
 
-  void fadeInComponents(List<Component> components) async {
-    components.forEach((it) => it.fadeIn());
+  void fadeInComponents(List<Component> args) async {
+    final duration = args.whereType<num>().firstOrNull?.toDouble();
+    args.whereType<Component>().forEach((it) => it.fadeIn(seconds: duration ?? 0.4));
   }
 
   void fadeInByType<T extends Component>([bool reset = true]) async {
     children.whereType<T>().forEach((it) => it.fadeIn());
+  }
+
+  void fadeOutAll() {
+    for (final it in children) {
+      it.add(OpacityEffect.fadeOut(EffectController(duration: 1)));
+      it.add(RemoveEffect(delay: 1));
+    }
   }
 
   void fadeOutByFilename(List<String> filenames) {
@@ -77,6 +94,38 @@ mixin ScriptFunctions on Component {
       target?.fadeOut();
       target?.add(RemoveEffect(delay: 1));
     }
+  }
+
+  Future<SpriteAnimation> loadAnim(
+    String filename, {
+    required int frames,
+    required double stepTimeSeconds,
+    required num frameWidth,
+    required num frameHeight,
+    bool loop = true,
+  }) async {
+    final frameSize = Vector2(frameWidth.toDouble(), frameHeight.toDouble());
+    return game.loadSpriteAnimation(
+      filename,
+      SpriteAnimationData.sequenced(
+        amount: frames.toInt(),
+        stepTime: stepTimeSeconds.toDouble(),
+        textureSize: frameSize,
+        loop: loop,
+      ),
+    );
+  }
+
+  Future<SpriteAnimationComponent> makeAnim(
+    Future<SpriteAnimation> animation,
+    Vector2 position,
+    Anchor anchor,
+  ) async {
+    return SpriteAnimationComponent(
+      animation: await animation,
+      position: position,
+      anchor: anchor,
+    );
   }
 
   Future<BitmapButton> menuButton({
@@ -133,12 +182,38 @@ mixin ScriptFunctions on Component {
 
   void pressFireToStart() => add(PressFireToStart());
 
+  void scaleTo(Component it, double scale, double duration, Curve? curve) {
+    it.add(
+      ScaleEffect.to(
+        Vector2.all(scale.toDouble()),
+        EffectController(duration: duration.toDouble(), curve: curve ?? Curves.decelerate),
+      ),
+    );
+  }
+
   void addSubtitles({
     required String text,
     double? autoClearSeconds,
     String? image,
   }) {
     add(SubtitlesComponent(text, autoClearSeconds, image));
+  }
+
+  BitmapText text({
+    required String text,
+    Vector2? position,
+    Anchor? anchor,
+    double? scale,
+  }) {
+    final it = BitmapText(
+      text: text,
+      position: position,
+      anchor: anchor ?? Anchor.center,
+      font: font,
+      scale: scale ?? 1,
+    );
+    add(it);
+    return it;
   }
 
   @override
