@@ -30,6 +30,11 @@ mixin ScriptFunctions on Component {
     removeAll(what);
   }
 
+  void delay(double seconds) async {
+    final millis = (seconds * 1000).toInt();
+    await Stream.periodic(Duration(milliseconds: millis)).first;
+  }
+
   StoryDialogComponent dialog(
     String portrait,
     String text, {
