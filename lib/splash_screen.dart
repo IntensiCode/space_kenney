@@ -1,32 +1,18 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/services.dart';
+import 'package:space_kenney/story/coco_loco_script_component.dart';
 
 import 'core/common.dart';
 import 'core/events.dart';
-import 'core/soundboard.dart';
-import 'util/bitmap_text.dart';
-import 'util/extensions.dart';
-import 'util/fonts.dart';
 
-class SplashScreen extends Component with KeyboardHandler, TapCallbacks {
-  final _blackPaint = Paint()..color = const Color(0xFF000000);
-
-  final _intensiLine0 = Vector2(160, 70);
-  final _intensiLine1 = Vector2(160, 100);
-  final _intensiLine2 = Vector2(160, 120);
-  final _intensiLine3 = Vector2(160, 140);
-  final _intensiLine4 = Vector2(160, 190);
-
+class SplashScreen extends CocoLocoScriptComponent with KeyboardHandler, TapCallbacks {
   late final SpriteAnimation psychocell;
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    if (event is KeyDownEvent) showScreen(Screen.title);
+    if (event is KeyUpEvent) showScreen(Screen.title);
     return super.onKeyEvent(event, keysPressed);
   }
 
@@ -38,78 +24,28 @@ class SplashScreen extends Component with KeyboardHandler, TapCallbacks {
 
   @override
   onLoad() async {
-    psychocell = await game.loadSpriteAnimation(
-      'splash_anim.png',
-      SpriteAnimationData.sequenced(
-        amount: 13,
-        stepTime: 0.05,
-        textureSize: Vector2(120, 90),
-        loop: false,
-      ),
-    );
+    let('anim', await makeAnim(_loadSplashAnim(), Vector2(160, 128), Anchor.center));
+    let('title', Screen.title);
+    let('decelerate', Curves.decelerate);
 
-    add(RectangleComponent(
-      position: Vector2.zero(),
-      size: gameSize,
-      paint: _blackPaint,
-    ));
-
-    final script = [
-      (0500, () => _fadeIn('An', _intensiLine1)),
-      (1500, () => _fadeIn('IntensiCode', _intensiLine2)),
-      (2500, () => _fadeIn('Presentation', _intensiLine3)),
-      (5000, () => _fadeOutAll()),
-      (6000, () => _fadeIn('A', _intensiLine0)),
-      (6000, () => _showPsychocell()),
-      (6000, () => _fadeIn('Game', _intensiLine4)),
-      (9000, () => _zoomPsychocell()),
-      (9000, () => _fadeOutAll()),
-      (9999, () => showScreen(Screen.title)),
-    ];
-    runScript(script);
+    enact('''
+    (font @menuFont 0.5)
+    (at 0.5 (fadeIn (text 'An' 160 100)))
+    (at 1.0 (fadeIn (text 'IntensiCode' 160 120)))
+    (at 1.0 (fadeIn (text 'Presentation' 160 140)))
+    (at 2.5 (fadeOutAll))
+    (at 1.0 (playAudio swoosh.ogg))
+    (at 0.1 (add @anim))
+    (at 0.0 (fadeIn (text 'A' 160 70)))
+    (at 0.0 (fadeIn (text 'Game' 160 190)))
+    (at 2.0 (scaleTo @anim 10 1 @decelerate))
+    (at 0.0 (fadeOutAll))
+    (at 1.0 (showScreen @title))
+    ''');
   }
 
-  void _fadeIn(String text, Vector2 position) {
-    final line = _line(text, position);
-    line.opacity = 0;
-    line.add(OpacityEffect.fadeIn(EffectController(duration: 1)));
-    add(line);
-  }
-
-  BitmapText _line(String text, Vector2 position) => BitmapText(
-        text: text,
-        position: position,
-        font: menuFont,
-        anchor: Anchor.center,
-      );
-
-  void _fadeOutAll() {
-    for (final it in children) {
-      it.add(OpacityEffect.fadeOut(EffectController(duration: 1)));
-      it.add(RemoveEffect(delay: 1));
-    }
-  }
+  Future<SpriteAnimation> _loadSplashAnim() =>
+      loadAnim('splash_anim.png', frames: 13, stepTimeSeconds: 0.05, frameWidth: 120, frameHeight: 90, loop: false);
 
   late final SpriteAnimationComponent psychocellComponent;
-
-  void _showPsychocell() {
-    soundboard.masterVolume = 0.75;
-    soundboard.play(Sound.swoosh);
-    psychocellComponent = SpriteAnimationComponent(
-      animation: psychocell,
-      position: Vector2(160, 128),
-      anchor: Anchor.center,
-    );
-    add(psychocellComponent);
-  }
-
-  void _zoomPsychocell() {
-    soundboard.play(Sound.swoosh);
-    psychocellComponent.add(
-      ScaleEffect.to(
-        Vector2.all(10),
-        EffectController(duration: 1, curve: Curves.decelerate),
-      ),
-    );
-  }
 }
