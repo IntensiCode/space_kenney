@@ -138,6 +138,17 @@ mixin ScriptFunctions on Component {
         anchor: anchor,
       );
 
+  Future<BitmapButton> menuButtonXY(
+    String text,
+    double x,
+    double y, [
+    Anchor? anchor,
+    String? bgNinePatch,
+    Function(BitmapButton)? onTap,
+  ]) {
+    return menuButton(text: text, pos: Vector2(x, y), anchor: anchor, bgNinePatch: bgNinePatch, onTap: onTap);
+  }
+
   Future<BitmapButton> menuButton({
     required String text,
     Vector2? pos,
