@@ -4,9 +4,9 @@ import 'package:flame/components.dart';
 
 import 'core/common.dart';
 import 'core/events.dart';
-import 'level1/intro1.dart';
 import 'splash_screen.dart';
 import 'title_screen.dart';
+import 'tutorial/tutorial_intro.dart';
 
 class GameWorld extends World {
   int chapter = 1;
@@ -21,8 +21,8 @@ class GameWorld extends World {
     switch (it) {
       case Screen.game:
         showGame();
-      case Screen.intro:
-        showIntro();
+      case Screen.tutorial:
+        showTutorial();
       case Screen.splash:
         showSplash();
       case Screen.title:
@@ -42,17 +42,17 @@ class GameWorld extends World {
 
   void previousChapter() {
     if (chapter > 1) chapter--;
-    showIntro();
+    showTutorial();
   }
 
   void nextChapter() {
     if (chapter < 1) chapter++;
-    showIntro();
+    showTutorial();
   }
 
-  void showIntro() {
+  void showTutorial() {
     removeAll(children);
-    add(Intro1());
+    add(TutorialIntro());
   }
 
   void showGame() {

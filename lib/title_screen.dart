@@ -10,13 +10,13 @@ class TitleScreen extends CocoLocoScriptComponent with KeyboardHandler, TapCallb
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (event case KeyUpEvent it) {
-      if (it.logicalKey.keyLabel == ' ') showScreen(Screen.intro);
+      if (it.logicalKey.keyLabel == ' ') showScreen(Screen.tutorial);
     }
     return super.onKeyEvent(event, keysPressed);
   }
 
   @override
-  void onTapDown(TapDownEvent event) => showScreen(Screen.intro);
+  void onTapDown(TapDownEvent event) => showScreen(Screen.tutorial);
 
   @override
   bool containsLocalPoint(Vector2 point) => true;

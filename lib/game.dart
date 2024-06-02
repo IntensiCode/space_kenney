@@ -82,7 +82,7 @@ class SpaceKenneyGame extends FlameGame<GameWorld>
       // world.add(WebPlayScreen());
       // world.showSplash();
       world.showTitle();
-      // world.showIntro();
+      // world.showTutorial();
     } else {
       if (kIsWeb) {
         world.add(WebPlayScreen());
@@ -123,7 +123,7 @@ class SpaceKenneyGame extends FlameGame<GameWorld>
         return KeyEventResult.handled;
       }
       if (event.character == 'r') {
-        world.showIntro();
+        world.showTutorial();
         return KeyEventResult.handled;
       }
       if (event.character == 'S') {

@@ -41,7 +41,7 @@ late Images images;
 
 enum Screen {
   game,
-  intro,
   splash,
   title,
+  tutorial,
 }

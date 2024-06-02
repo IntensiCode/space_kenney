@@ -7,7 +7,7 @@ import '../core/common.dart';
 import '../core/events.dart';
 import '../story/story_dialog_component.dart';
 
-class Intro1 extends DirectScriptComponent with KeyboardHandler, TapCallbacks {
+class TutorialIntro extends DirectScriptComponent with KeyboardHandler, TapCallbacks {
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (event case KeyUpEvent it) {
