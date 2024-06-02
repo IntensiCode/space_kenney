@@ -128,17 +128,15 @@ mixin ScriptFunctions on Component {
     );
   }
 
-  Future<SpriteAnimationComponent> makeAnim(
-    Future<SpriteAnimation> animation,
-    Vector2 position,
-    Anchor anchor,
-  ) async {
-    return SpriteAnimationComponent(
-      animation: await animation,
-      position: position,
-      anchor: anchor,
-    );
-  }
+  SpriteAnimationComponent makeAnimXY(SpriteAnimation animation, double x, double y, [Anchor anchor = Anchor.center]) =>
+      makeAnim(animation, Vector2(x, y), anchor);
+
+  SpriteAnimationComponent makeAnim(SpriteAnimation animation, Vector2 position, [Anchor anchor = Anchor.center]) =>
+      SpriteAnimationComponent(
+        animation: animation,
+        position: position,
+        anchor: anchor,
+      );
 
   Future<BitmapButton> menuButton({
     required String text,
