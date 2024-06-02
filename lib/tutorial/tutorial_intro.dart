@@ -38,12 +38,6 @@ class TutorialIntro extends DirectScriptComponent with KeyboardHandler, TapCallb
     at(12, () => pressFireToStart());
   }
 
-  @override
-  void onMount() {
-    super.onMount();
-    execute();
-  }
-
   final _kennyText1 = 'I was minding my own business, when a message from '
       'Central arrived...';
 

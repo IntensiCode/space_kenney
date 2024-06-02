@@ -41,12 +41,6 @@ class SplashScreen extends DirectScriptComponent with KeyboardHandler, TapCallba
     at(1.0, () => showScreen(Screen.title));
   }
 
-  @override
-  void onMount() {
-    super.onMount();
-    execute();
-  }
-
   Future<SpriteAnimation> _loadSplashAnim() =>
       loadAnim('splash_anim.png', frames: 13, stepTimeSeconds: 0.05, frameWidth: 120, frameHeight: 90, loop: false);
 

@@ -30,6 +30,12 @@ class DirectScriptComponent extends Component with ScriptFunctions {
   }
 
   @override
+  void onMount() {
+    super.onMount();
+    execute();
+  }
+
+  @override
   void onRemove() {
     super.onRemove();
     active?.cancel();
