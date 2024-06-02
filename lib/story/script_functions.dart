@@ -39,8 +39,11 @@ mixin ScriptFunctions on Component {
   StoryDialogComponent dialog(
     String portrait,
     String text, {
+    String? audio,
     Anchor anchor = Anchor.topLeft,
   }) {
+    if (audio != null) playAudio(audio);
+
     final offset = dialogOffsets.putIfAbsent(portrait, _nextPortraitOffset);
     final it = StoryDialogComponent(portrait, text);
     it.position.x = offset;
