@@ -29,16 +29,24 @@ class SubtitlesComponent extends PositionComponent with HasPaint {
       add(RemoveEffect(delay: autoClearSeconds! + 1));
     }
 
-    position.x = gameWidth / 2;
-    position.y = gameHeight;
-    anchor = Anchor.bottomCenter;
+    position.x = 0;
+    position.y = gameHeight - 8;
+    anchor = Anchor.bottomLeft;
 
     final lineHeight = textFont.lineHeight(_fontScale) * 4 / 3;
-    final lines = textFont.reflow(text, 256 - 80, scale: _fontScale);
+    final lines = textFont.reflow(text, 176, scale: _fontScale);
     final w = lines.map((it) => textFont.lineWidth(it)).max();
     final h = lines.length * lineHeight;
-    size.x = w + 16;
+    size.x = gameWidth;
     size.y = h + 16 - (lineHeight - textFont.lineHeight(_fontScale) + 1);
+
+    if (portrait != null) {
+      _portrait = await loadSprite(portrait!);
+      _portrait?.anchor = Anchor.bottomLeft;
+      _portrait?.position.x = 0;
+      _portrait?.position.y = size.y + 8;
+      add(_portrait!);
+    }
 
     final pos = Vector2.zero();
     for (final line in lines) {
@@ -55,16 +63,9 @@ class SubtitlesComponent extends PositionComponent with HasPaint {
       add(text);
     }
 
-    if (portrait != null) {
-      _portrait = await loadSprite(portrait!);
-      _portrait?.anchor = Anchor.bottomRight;
-      _portrait?.position.x = -2;
-      _portrait?.position.y = size.y;
-      add(_portrait!);
-    }
-
+    final bgWidth = w + 16.0;
     _bgRect = RRect.fromRectAndRadius(
-      Rect.fromLTWH(0, 0, width, height),
+      Rect.fromLTWH((gameWidth - bgWidth) / 2, 0.0, bgWidth, height),
       const Radius.circular(8),
     );
 
