@@ -1,12 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
-import 'package:space_kenney/story/coco_loco_script_component.dart';
 
 import 'core/common.dart';
 import 'core/events.dart';
+import 'story/direct_script_component.dart';
 
-class TitleScreen extends CocoLocoScriptComponent with KeyboardHandler, TapCallbacks {
+class TitleScreen extends DirectScriptComponent with KeyboardHandler, TapCallbacks {
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (event case KeyUpEvent it) {
@@ -23,17 +23,15 @@ class TitleScreen extends CocoLocoScriptComponent with KeyboardHandler, TapCallb
 
   @override
   onLoad() async {
-    enact('''
-      (music music_title.mp3)
-      (fadeIn (image title_background.png))
-      (at 0.1 (fadeIn (image title.png 160 5 @topCenter)))
-      (at 0.1 (fadeIn (image kenny.png 320 256 @bottomRight)))
-      (at 0.1 (fadeIn (image flame.png 4 245 @bottomLeft)))
-      (at 0.1 (fadeIn (menuButton "@Settings" 16 200 @topLeft)))
-      (at 0.1 (fadeIn (menuButton "@Continue" 16 180 @topLeft)))
-      (at 0.1 (fadeIn (menuButton "@New_Game" 16 160 @topLeft)))
-      (at 0.1 (pressFireToStart))
-    ''');
+    music('music_title.mp3');
+    fadeIn(await image(filename: 'title_background.png'));
+    at(0.1, () async => fadeIn(await imageXY('title.png', 160, 5, Anchor.topCenter)));
+    at(0.1, () async => fadeIn(await imageXY('kenny.png', 320, 256, Anchor.bottomRight)));
+    at(0.1, () async => fadeIn(await imageXY('flame.png', 4, 245, Anchor.bottomLeft)));
+    at(0.1, () async => fadeIn(await menuButtonXY('Settings', 16, 200, Anchor.topLeft)));
+    at(0.1, () async => fadeIn(await menuButtonXY('Continue', 16, 180, Anchor.topLeft)));
+    at(0.1, () async => fadeIn(await menuButtonXY('New Game', 16, 160, Anchor.topLeft)));
+    at(0.1, () => pressFireToStart());
   }
 
   Vector2 p(double x, double y) => Vector2(x, y);
