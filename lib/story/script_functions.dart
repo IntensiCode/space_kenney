@@ -56,6 +56,8 @@ mixin ScriptFunctions on Component {
 
   double _nextPortraitOffset() => (dialogOffsets.length + 1) * 8;
 
+  void fadeIn(Component it, {double duration = 1}) => it.fadeIn(seconds: duration);
+
   BitmapFont? font;
   double? fontScale;
 
