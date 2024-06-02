@@ -194,7 +194,7 @@ mixin ScriptFunctions on Component {
     );
   }
 
-  void addSubtitles(String text, double? autoClearSeconds, {String? image, String? audio}) {
+  void subtitles(String text, double? autoClearSeconds, {String? image, String? audio}) {
     if (audio != null) playAudio(audio);
     add(SubtitlesComponent(text, autoClearSeconds, image));
   }
