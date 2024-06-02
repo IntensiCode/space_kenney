@@ -1,16 +1,16 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
+import 'package:space_kenney/story/direct_script_component.dart';
 
 import '../core/common.dart';
 import '../core/events.dart';
-import '../story/script_component.dart';
 import '../story/story_dialog_component.dart';
 
-class Intro1 extends Component with KeyboardHandler, TapCallbacks {
+class Intro1 extends DirectScriptComponent with KeyboardHandler, TapCallbacks {
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    if (event case KeyDownEvent it) {
+    if (event case KeyUpEvent it) {
       if (it.logicalKey.keyLabel == ' ') showScreen(Screen.game);
     }
     return super.onKeyEvent(event, keysPressed);
@@ -27,23 +27,21 @@ class Intro1 extends Component with KeyboardHandler, TapCallbacks {
 
   @override
   onLoad() async {
-    final List<ScriptLine> lines = [
-      (0, ('fadeIn', ['chapter1.png', 160, 128, Anchor.center])),
-      (1, ('playAudio', ['chapter_1_1_kenney.mp3'])),
-      (0, ('subtitles', [_kennyText1, ('clear', 3.5), ('image', kenney)])),
-      (4.5, ('dialog', [central, _centralText])),
-      (0, ('playAudio', ['chapter_1_2_central.mp3'])),
-      (8.5, ('dialog', [kenney, _kennyText2])),
-      (0, ('playAudio', ['chapter_1_3_kenney.ogg'])),
-      (5, ('clear', [StoryDialogComponent])),
-      (1, ('playAudio', ['chapter_1_4_kenney.mp3'])),
-      (0, ('subtitles', [_kennyText3, ('clear', 11), ('image', kenney)])),
-      (12, ('pressFireToStart', [])),
-    ];
-    final script = ScriptComponent();
-    script.addScript(lines);
-    script.enact();
-    add(script);
+    fadeIn(await imageXY('chapter1.png', 160, 128));
+
+    at(1, () => playAudio('chapter_1_1_kenney.mp3'));
+    at(0, () => subtitles(_kennyText1, 3.5, image: kenney));
+    at(4.5, () => dialog(central, _centralText, audio: 'chapter_1_2_central.mp3'));
+    at(8.5, () => dialog(kenney, _kennyText2, audio: 'chapter_1_3_kenney.ogg'));
+    at(5, () => clearByType([StoryDialogComponent]));
+    at(1, () => subtitles(_kennyText3, 11, image: kenney, audio: 'chapter_1_4_kenney.mp3'));
+    at(12, () => pressFireToStart());
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
+    execute();
   }
 
   final _kennyText1 = 'I was minding my own business, when a message from '
