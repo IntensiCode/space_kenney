@@ -2,12 +2,13 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/services.dart';
-import 'package:space_kenney/story/coco_loco_script_component.dart';
+import 'package:space_kenney/util/fonts.dart';
 
 import 'core/common.dart';
 import 'core/events.dart';
+import 'story/direct_script_component.dart';
 
-class SplashScreen extends CocoLocoScriptComponent with KeyboardHandler, TapCallbacks {
+class SplashScreen extends DirectScriptComponent with KeyboardHandler, TapCallbacks {
   late final SpriteAnimation psychocell;
 
   @override
@@ -23,25 +24,27 @@ class SplashScreen extends CocoLocoScriptComponent with KeyboardHandler, TapCall
   bool containsLocalPoint(Vector2 point) => true;
 
   @override
-  onLoad() async {
-    let('anim', await makeAnim(_loadSplashAnim(), Vector2(160, 128), Anchor.center));
-    let('title', Screen.title);
-    let('decelerate', Curves.decelerate);
+  void onLoad() async {
+    final anim = makeAnimXY(await _loadSplashAnim(), 160, 128);
+    fontSelect(menuFont, scale: 0.5);
 
-    enact('''
-    (font @menuFont 0.5)
-    (at 0.5 (fadeIn (text 'An' 160 100)))
-    (at 1.0 (fadeIn (text 'IntensiCode' 160 120)))
-    (at 1.0 (fadeIn (text 'Presentation' 160 140)))
-    (at 2.5 (fadeOutAll))
-    (at 1.0 (playAudio swoosh.ogg))
-    (at 0.1 (add @anim))
-    (at 0.0 (fadeIn (text 'A' 160 70)))
-    (at 0.0 (fadeIn (text 'Game' 160 190)))
-    (at 2.0 (scaleTo @anim 10 1 @decelerate))
-    (at 0.0 (fadeOutAll))
-    (at 1.0 (showScreen @title))
-    ''');
+    at(0.5, () => fadeIn(textXY('An', 160, 100)));
+    at(1.0, () => fadeIn(textXY('IntensiCode', 160, 120)));
+    at(1.0, () => fadeIn(textXY('Presentation', 160, 140)));
+    at(2.5, () => fadeOutAll());
+    at(1.0, () => playAudio('swoosh.ogg'));
+    at(0.1, () => add(anim));
+    at(0.0, () => fadeIn(textXY('A', 160, 70)));
+    at(0.0, () => fadeIn(textXY('Game', 160, 190)));
+    at(2.0, () => scaleTo(anim, 10, 1, Curves.decelerate));
+    at(0.0, () => fadeOutAll());
+    at(1.0, () => showScreen(Screen.title));
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
+    execute();
   }
 
   Future<SpriteAnimation> _loadSplashAnim() =>
