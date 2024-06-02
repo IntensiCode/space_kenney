@@ -225,7 +225,7 @@ mixin CocoLocoScript on Component, ScriptFunctions {
 
   _font(List args) {
     final scale = args.getOrNull(1) as num?;
-    setFont(args[0], scale: scale?.toDouble());
+    fontSelect(args[0], scale: scale?.toDouble());
   }
 
   Future<SpriteComponent> _image(List args) async {

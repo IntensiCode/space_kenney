@@ -56,7 +56,7 @@ mixin ScriptFunctions on Component {
   BitmapFont? font;
   double? fontScale;
 
-  setFont(BitmapFont? font, {double? scale = 1}) {
+  fontSelect(BitmapFont? font, {double? scale = 1}) {
     this.font = font;
     fontScale = scale;
   }
