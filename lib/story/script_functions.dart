@@ -77,6 +77,13 @@ mixin ScriptFunctions on Component {
     return it;
   }
 
+  Future<SpriteComponent> imageXY(String filename, double x, double y, {Anchor anchor = Anchor.center}) async {
+    final it = await loadSprite(filename, position: Vector2(x, y), anchor: anchor);
+    knownComponents[filename] = it;
+    add(it);
+    return it;
+  }
+
   void fadeInComponents(List<Component> args) async {
     final duration = args.whereType<num>().firstOrNull?.toDouble();
     args.whereType<Component>().forEach((it) => it.fadeIn(seconds: duration ?? 0.4));
