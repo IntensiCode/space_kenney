@@ -22,9 +22,6 @@ class TutorialIntro extends DirectScriptComponent with KeyboardHandler, TapCallb
   @override
   bool containsLocalPoint(Vector2 point) => true;
 
-  final kenney = 'dialog_kenney.png';
-  final central = 'dialog_central.png';
-
   @override
   onLoad() async {
     fadeIn(await imageXY('chapter1.png', 160, 128));

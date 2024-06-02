@@ -5,6 +5,9 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 
+const kenney = 'dialog_kenney.png';
+const central = 'dialog_central.png';
+
 const double tileSize = 16;
 
 const double gameWidth = 320;
