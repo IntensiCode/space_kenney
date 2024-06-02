@@ -206,6 +206,9 @@ mixin ScriptFunctions on Component {
     add(SubtitlesComponent(text, autoClearSeconds, image));
   }
 
+  BitmapText textXY(String text, double x, double y, [Anchor anchor = Anchor.center, double scale = 1]) =>
+      this.text(text: text, position: Vector2(x, y), anchor: anchor, scale: scale);
+
   BitmapText text({
     required String text,
     Vector2? position,
