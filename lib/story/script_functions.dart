@@ -121,6 +121,33 @@ mixin ScriptFunctions on Component {
     }
   }
 
+  Future<SpriteAnimation> loadAnimWH(
+    String filename,
+    int frameWidth,
+    int frameHeight, [
+    double stepTime = 0.1,
+    bool loop = true,
+  ]) async {
+    final image = await images.load(filename);
+    final columns = image.width ~/ frameWidth;
+    if (columns * frameWidth != image.width) {
+      throw ArgumentError('image width ${image.width} / frame width $frameWidth');
+    }
+    final rows = image.height ~/ frameHeight;
+    if (rows * frameHeight != image.height) {
+      throw ArgumentError('image height ${image.height} / frame height $frameHeight');
+    }
+    return SpriteAnimation.fromFrameData(
+        image,
+        SpriteAnimationData.sequenced(
+          amount: columns * rows,
+          amountPerRow: columns,
+          stepTime: stepTime,
+          textureSize: Vector2(frameWidth.toDouble(), frameHeight.toDouble()),
+          loop: loop,
+        ));
+  }
+
   Future<SpriteAnimation> loadAnim(
     String filename, {
     required int frames,
