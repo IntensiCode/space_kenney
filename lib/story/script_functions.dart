@@ -66,7 +66,7 @@ mixin ScriptFunctions on Component {
     fontScale = scale;
   }
 
-  Future<SpriteComponent> image({
+  Future<SpriteComponent> sprite({
     required String filename,
     Vector2? position,
     Anchor? anchor,
@@ -77,7 +77,7 @@ mixin ScriptFunctions on Component {
     return it;
   }
 
-  Future<SpriteComponent> imageXY(String filename, double x, double y, [Anchor anchor = Anchor.center]) async {
+  Future<SpriteComponent> spriteXY(String filename, double x, double y, [Anchor anchor = Anchor.center]) async {
     final it = await loadSprite(filename, position: Vector2(x, y), anchor: anchor);
     knownComponents[filename] = it;
     add(it);

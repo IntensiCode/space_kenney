@@ -24,10 +24,10 @@ class TitleScreen extends DirectScriptComponent with KeyboardHandler, TapCallbac
   @override
   onLoad() async {
     music('music_title.mp3');
-    fadeIn(await image(filename: 'title_background.png'));
-    at(0.1, () async => fadeIn(await imageXY('title.png', 160, 5, Anchor.topCenter)));
-    at(0.1, () async => fadeIn(await imageXY('kenny.png', 320, 256, Anchor.bottomRight)));
-    at(0.1, () async => fadeIn(await imageXY('flame.png', 4, 245, Anchor.bottomLeft)));
+    fadeIn(await sprite(filename: 'title_background.png'));
+    at(0.1, () async => fadeIn(await spriteXY('title.png', 160, 5, Anchor.topCenter)));
+    at(0.1, () async => fadeIn(await spriteXY('kenny.png', 320, 256, Anchor.bottomRight)));
+    at(0.1, () async => fadeIn(await spriteXY('flame.png', 4, 245, Anchor.bottomLeft)));
     at(0.1, () async => fadeIn(await menuButtonXY('Settings', 16, 200, Anchor.topLeft)));
     at(0.1, () async => fadeIn(await menuButtonXY('Continue', 16, 180, Anchor.topLeft)));
     at(0.1, () async => fadeIn(await menuButtonXY('New Game', 16, 160, Anchor.topLeft)));
