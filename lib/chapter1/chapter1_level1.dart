@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:space_kenney/v_shmup/moons_background.dart';
 
 import '../core/common.dart';
 import '../story/direct_script_component.dart';
@@ -9,6 +10,7 @@ class Chapter1_Level1 extends DirectScriptComponent with KeyboardHandler, TapCal
   @override
   onLoad() async {
     stars();
+    moons();
     at(1, () => playAudio('dialog/c1_l1_kay_1.ogg'));
     at(0, () => subtitles(_kay1, 10, image: kay));
     at(11, () => playAudio('dialog/c1_l1_kenney_1.mp3'));
