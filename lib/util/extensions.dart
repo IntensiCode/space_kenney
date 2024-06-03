@@ -123,6 +123,10 @@ extension ComponentExtensions on Component {
 
 extension DynamicListExtensions on List<dynamic> {
   List<T> mapToType<T>() => map((it) => it as T).toList();
+
+  void rotateLeft() => add(removeAt(0));
+
+  void rotateRight() => insert(0, removeLast());
 }
 
 extension RandomExtensions on Random {
