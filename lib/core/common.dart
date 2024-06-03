@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 
+const kay = 'dialog_kay.png';
 const kenney = 'dialog_kenney.png';
 const central = 'dialog_central.png';
 
