@@ -68,6 +68,11 @@ mixin ScriptFunctions on Component {
     fontScale = scale;
   }
 
+  Future<Image> image(String filename) => images.load(filename);
+
+  SpriteSheet sheet(Image image, int columns, int rows) =>
+      SpriteSheet.fromColumnsAndRows(image: image, columns: columns, rows: rows);
+
   Future<SpriteComponent> sprite({
     required String filename,
     Vector2? position,
