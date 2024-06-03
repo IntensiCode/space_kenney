@@ -7,24 +7,26 @@ import '../core/common.dart';
 import '../core/events.dart';
 import '../story/story_dialog_component.dart';
 
-class TutorialIntro extends DirectScriptComponent with KeyboardHandler, TapCallbacks {
+class Chapter1_Intro extends DirectScriptComponent with KeyboardHandler, TapCallbacks {
+  static const next = Screen.chapter1_level1;
+
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (event case KeyUpEvent it) {
-      if (it.logicalKey.keyLabel == ' ') showScreen(Screen.game);
+      if (it.logicalKey.keyLabel == ' ') showScreen(next);
     }
     return super.onKeyEvent(event, keysPressed);
   }
 
   @override
-  void onTapDown(TapDownEvent event) => showScreen(Screen.game);
+  void onTapDown(TapDownEvent event) => showScreen(next);
 
   @override
   bool containsLocalPoint(Vector2 point) => true;
 
   @override
   onLoad() async {
-    fadeIn(await imageXY('chapter1.png', 160, 128));
+    fadeIn(await spriteXY('chapter1.png', 160, 128));
 
     at(1, () => playAudio('chapter_1_1_kenney.mp3'));
     at(0, () => subtitles(_kennyText1, 3.5, image: kenney));

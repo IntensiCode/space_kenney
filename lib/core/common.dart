@@ -44,8 +44,8 @@ late Game game;
 late Images images;
 
 enum Screen {
-  game,
+  chapter1,
+  chapter1_level1,
   splash,
   title,
-  tutorial,
 }

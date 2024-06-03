@@ -10,13 +10,13 @@ class TitleScreen extends DirectScriptComponent with KeyboardHandler, TapCallbac
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (event case KeyUpEvent it) {
-      if (it.logicalKey.keyLabel == ' ') showScreen(Screen.tutorial);
+      if (it.logicalKey.keyLabel == ' ') showScreen(Screen.chapter1);
     }
     return super.onKeyEvent(event, keysPressed);
   }
 
   @override
-  void onTapDown(TapDownEvent event) => showScreen(Screen.tutorial);
+  void onTapDown(TapDownEvent event) => showScreen(Screen.chapter1);
 
   @override
   bool containsLocalPoint(Vector2 point) => true;

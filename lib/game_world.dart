@@ -2,27 +2,26 @@ import 'package:dart_minilog/dart_minilog.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 
+import 'chapter1/chapter1_intro.dart';
+import 'chapter1/chapter1_level1.dart';
 import 'core/common.dart';
 import 'core/events.dart';
 import 'splash_screen.dart';
 import 'title_screen.dart';
-import 'tutorial/tutorial_intro.dart';
 
 class GameWorld extends World {
   int chapter = 1;
 
   @override
-  void onLoad() {
-    onScreen(_showScreen);
-  }
+  void onLoad() => onScreen(_showScreen);
 
   void _showScreen(Screen it) {
     logInfo(it);
     switch (it) {
-      case Screen.game:
-        showGame();
-      case Screen.tutorial:
-        showTutorial();
+      case Screen.chapter1_level1:
+        showChapter1Level1();
+      case Screen.chapter1:
+        showChapter1();
       case Screen.splash:
         showSplash();
       case Screen.title:
@@ -42,21 +41,21 @@ class GameWorld extends World {
 
   void previousChapter() {
     if (chapter > 1) chapter--;
-    showTutorial();
+    showChapter1();
   }
 
   void nextChapter() {
     if (chapter < 1) chapter++;
-    showTutorial();
+    showChapter1();
   }
 
-  void showTutorial() {
+  void showChapter1() {
     removeAll(children);
-    add(TutorialIntro());
+    add(Chapter1_Intro());
   }
 
-  void showGame() {
+  void showChapter1Level1() {
     removeAll(children);
-    // add(Intro1());
+    add(Chapter1_Level1());
   }
 }

@@ -15,12 +15,24 @@ import 'util/fonts.dart';
 import 'util/performance.dart';
 
 class SpaceKenneyGame extends FlameGame<GameWorld>
-    with
-        HasCollisionDetection,
-        HasKeyboardHandlerComponents,
-        HasPerformanceTracker {
+    with HasCollisionDetection, HasKeyboardHandlerComponents, HasPerformanceTracker {
   //
   final _ticker = Ticker(ticks: 120);
+
+  void _showInitialScreen() {
+    if (dev) {
+      // world.add(WebPlayScreen());
+      // world.showSplash();
+      // world.showTitle();
+      world.showChapter1Level1();
+    } else {
+      if (kIsWeb) {
+        world.add(WebPlayScreen());
+      } else {
+        world.showSplash();
+      }
+    }
+  }
 
   SpaceKenneyGame() : super(world: GameWorld()) {
     game = this;
@@ -78,23 +90,11 @@ class SpaceKenneyGame extends FlameGame<GameWorld>
       charWidth: 12,
       charHeight: 12,
     );
-    if (dev) {
-      // world.add(WebPlayScreen());
-      // world.showSplash();
-      world.showTitle();
-      // world.showTutorial();
-    } else {
-      if (kIsWeb) {
-        world.add(WebPlayScreen());
-      } else {
-        world.showSplash();
-      }
-    }
+    _showInitialScreen();
   }
 
   @override
-  update(double dt) =>
-      _ticker.generateTicksFor(dt * _timeScale, (it) => super.update(it));
+  update(double dt) => _ticker.generateTicksFor(dt * _timeScale, (it) => super.update(it));
 
   double _timeScale = 1;
 
@@ -123,7 +123,7 @@ class SpaceKenneyGame extends FlameGame<GameWorld>
         return KeyEventResult.handled;
       }
       if (event.character == 'r') {
-        world.showTutorial();
+        world.showChapter1();
         return KeyEventResult.handled;
       }
       if (event.character == 'S') {
