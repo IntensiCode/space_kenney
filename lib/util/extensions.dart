@@ -83,6 +83,11 @@ extension TiledObjectExtensions on TiledObject {
 }
 
 extension ComponentExtensions on Component {
+  T added<T extends Component>(T it) {
+    add(it);
+    return it;
+  }
+
   void fadeIn({double seconds = 0.4, bool restart = true}) {
     if (this case OpacityProvider it) {
       if (it.opacity == 1 && !restart) return;
