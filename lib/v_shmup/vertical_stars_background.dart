@@ -25,7 +25,7 @@ class VerticalStarsBackground extends Component with ScriptFunctions {
     final animations = await _createAnimations();
     stars = List.generate(_count, (it) {
       final slot = it * _slotWidth;
-      return added(Star(animations, slot));
+      return added(Star(animations, slot)..priority = -100);
     });
   }
 
