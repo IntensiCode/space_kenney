@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -117,4 +118,8 @@ extension ComponentExtensions on Component {
 
 extension DynamicListExtensions on List<dynamic> {
   List<T> mapToType<T>() => map((it) => it as T).toList();
+}
+
+extension RandomExtensions on Random {
+  double nextDoubleLimit(double limit) => nextDouble() * limit;
 }
