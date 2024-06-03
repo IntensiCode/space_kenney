@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/sprite.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/animation.dart';
 
@@ -73,6 +75,12 @@ mixin ScriptFunctions on Component {
   }) async {
     final it = await loadSprite(filename, position: position, anchor: anchor);
     knownComponents[filename] = it;
+    add(it);
+    return it;
+  }
+
+  SpriteComponent spriteIXY(Image image, double x, double y, [Anchor anchor = Anchor.center]) {
+    final it = SpriteComponent(sprite: Sprite(image), position: Vector2(x, y), anchor: anchor);
     add(it);
     return it;
   }
