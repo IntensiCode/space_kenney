@@ -11,7 +11,7 @@ final _slotWidth = gameWidth / _count;
 final _blinkiness = 0.001 / _count;
 
 // length have to match animations length. see note below.
-final _baseSpeeds = [2, 4, 1, 0.5, 1.5, 3, 0.75, 0.75, 0.75];
+final _baseSpeeds = [1.5, 1.75, 1, 0.5, 1.25, 3, 0.75, 0.75, 0.75];
 
 extension ScriptFunctionsExtension on ScriptFunctions {
   VerticalStarsBackground stars() => added(VerticalStarsBackground());
