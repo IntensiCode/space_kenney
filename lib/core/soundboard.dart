@@ -11,7 +11,9 @@ enum Sound {
 final soundboard = Soundboard();
 
 class Soundboard {
-  double masterVolume = 0.2;
+  double masterVolume = 0.3;
+  double musicVolume = 0.5;
+  double soundVolume = 0.8;
 
   preload() async {
     for (final it in Sound.values) {
@@ -21,7 +23,7 @@ class Soundboard {
   }
 
   play(Sound sound, {double? volume}) {
-    volume ??= 0.1;
+    volume ??= soundVolume;
     FlameAudio.play('${sound.name}.ogg', volume: volume * masterVolume);
   }
 }
