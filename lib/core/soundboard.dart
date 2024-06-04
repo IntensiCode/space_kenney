@@ -2,6 +2,7 @@ import 'package:dart_minilog/dart_minilog.dart';
 import 'package:flame_audio/flame_audio.dart';
 
 enum Sound {
+  asteroid_clash,
   explosion,
   game_over,
   swoosh,
