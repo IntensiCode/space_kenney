@@ -40,9 +40,9 @@ flutter:
     - assets/audio/dialog/
     - assets/fonts/
     - assets/images/
+    - assets/images/celestials/
     - assets/images/fonts/
     - assets/images/particles/
-    - assets/images/planets/
     - assets/images/projectiles/
     - assets/tiles/
   uses-material-design: true

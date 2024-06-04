@@ -48,7 +48,7 @@ class Asteroids extends Component with ScriptFunctions {
   void onLoad() async {
     for (final (it, hitrad) in _fileSpec) {
       _animations.add((
-        await loadAnimWH('planets/$it', _frameSize, _frameSize),
+        await loadAnimWH('celestials/$it', _frameSize, _frameSize),
         hitrad.toDouble(),
       ));
     }

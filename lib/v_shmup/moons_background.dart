@@ -29,7 +29,7 @@ class MoonsBackground extends Component with ScriptFunctions {
   @override
   void onLoad() async {
     for (final it in _fileSpec) {
-      final animation = await loadAnimWH('planets/$it', 32, 32, 0.1);
+      final animation = await loadAnimWH('celestials/$it', 32, 32, 0.1);
       _animations.add(animation);
     }
   }
