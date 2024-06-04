@@ -37,6 +37,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/audio/
+    - assets/audio/background/
     - assets/audio/dialog/
     - assets/fonts/
     - assets/images/
