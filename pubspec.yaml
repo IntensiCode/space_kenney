@@ -41,8 +41,10 @@ flutter:
     - assets/fonts/
     - assets/images/
     - assets/images/celestials/
+    - assets/images/explosions/
     - assets/images/fonts/
     - assets/images/particles/
     - assets/images/projectiles/
+    - assets/images/vshmup/
     - assets/tiles/
   uses-material-design: true
