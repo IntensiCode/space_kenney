@@ -217,9 +217,24 @@ mixin ScriptFunctions on Component {
   static const fadeInSeconds = 3;
 
   void music(String filename) async {
+    var volume = soundboard.musicVolume * soundboard.masterVolume;
+
     final AudioPlayer player;
     if (dev) {
-      player = await FlameAudio.playLongAudio(filename, volume: soundboard.masterVolume);
+      player = await FlameAudio.playLongAudio(filename, volume: volume);
+      // only in dev: fade out soonish, to avoid playing multiple times on hot restart.
+      player.onPositionChanged.listen((it) {
+        if (it.inSeconds < 10) return;
+
+        logInfo(volume);
+        player.setVolume(volume);
+        volume -= 0.1;
+
+        if (volume <=0) {
+          player.stop();
+          volume = 0;
+        }
+      });
     } else {
       player = await FlameAudio.loop(filename, volume: soundboard.masterVolume);
     }
