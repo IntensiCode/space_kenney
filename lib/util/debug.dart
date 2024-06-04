@@ -1,6 +1,10 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 
 import '../core/common.dart';
+
+Color? debugHitboxColor = const Color(0x40ff0000);
 
 class DebugCircleHitbox extends CircleComponent with HasVisibility {
   DebugCircleHitbox({
@@ -13,7 +17,9 @@ class DebugCircleHitbox extends CircleComponent with HasVisibility {
     super.priority,
     super.paint,
     super.paintLayers,
-  });
+  }) {
+    if (debugHitboxColor != null) paint.color = debugHitboxColor!;
+  }
 
   @override
   bool get isVisible => debug;
