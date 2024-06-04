@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:dart_minilog/dart_minilog.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/sprite.dart';
@@ -213,21 +214,36 @@ mixin ScriptFunctions on Component {
 
   final stopAudio = <void Function()>[];
 
+  static const fadeInSeconds = 3;
+
   void music(String filename) async {
     final AudioPlayer player;
     if (dev) {
-      player = await FlameAudio.playLongAudio(
-        'music_title.mp3',
-        volume: soundboard.masterVolume,
-      );
+      player = await FlameAudio.playLongAudio(filename, volume: soundboard.masterVolume);
     } else {
-      player = await FlameAudio.loop(
-        'music_title.mp3',
-        volume: soundboard.masterVolume,
-      );
+      player = await FlameAudio.loop(filename, volume: soundboard.masterVolume);
     }
+
+    late StreamSubscription fadeIn;
+    player.setVolume(0);
+    fadeIn = player.onPositionChanged.listen((it) {
+      if (it.inSeconds < fadeInSeconds) {
+        player.setVolume(soundboard.musicVolume * it.inMilliseconds / (fadeInSeconds * 1000) * soundboard.musicVolume);
+      } else {
+        player.setVolume(soundboard.musicVolume * soundboard.musicVolume);
+        fadeIn.cancel();
+      }
+    });
+    fadeIn.onDone(() => logInfo('fadein done'));
+
+    late StreamSubscription onStop;
     stop() => player.stop();
-    player.onPlayerComplete.listen((_) => stopAudio.remove(stop));
+    onStop = player.onPlayerComplete.listen((_) {
+      fadeIn.cancel();
+      stopAudio.remove(stop);
+      onStop.cancel();
+    });
+
     stopAudio.add(stop);
   }
 
