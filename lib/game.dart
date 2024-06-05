@@ -14,8 +14,7 @@ import 'util/bitmap_font.dart';
 import 'util/fonts.dart';
 import 'util/performance.dart';
 
-class SpaceKenneyGame extends FlameGame<GameWorld>
-    with HasCollisionDetection, HasKeyboardHandlerComponents, HasPerformanceTracker {
+class SpaceKenneyGame extends FlameGame<GameWorld> with HasKeyboardHandlerComponents, HasPerformanceTracker {
   //
   final _ticker = Ticker(ticks: 120);
 
