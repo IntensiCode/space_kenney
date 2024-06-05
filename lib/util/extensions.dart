@@ -131,4 +131,6 @@ extension DynamicListExtensions on List<dynamic> {
 
 extension RandomExtensions on Random {
   double nextDoubleLimit(double limit) => nextDouble() * limit;
+
+  double nextDoublePM(double limit) => (nextDouble() - nextDouble()) * limit;
 }
