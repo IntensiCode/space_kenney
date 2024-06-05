@@ -41,8 +41,6 @@ extension ScriptFunctionsExtension on ScriptFunctions {
 class VShmupAsteroids extends AutoDisposeComponent with ScriptFunctions {
   final _animations = <(SpriteAnimation, double)>[];
 
-  double _releaseTime = 0;
-
   int maxAsteroids = 16;
 
   @override
@@ -62,12 +60,9 @@ class VShmupAsteroids extends AutoDisposeComponent with ScriptFunctions {
     super.update(dt);
     lastEmission += dt;
     final minReleaseInterval = 1 / sqrt(maxAsteroids);
-    if (_releaseTime <= 0 || (children.length < maxAsteroids && lastEmission >= minReleaseInterval)) {
+    if (children.length < maxAsteroids && lastEmission >= minReleaseInterval) {
       add(VShmupAsteroid(_animations));
       lastEmission = 0;
-      _releaseTime = 1 + random.nextDoubleLimit(2);
-    } else {
-      _releaseTime -= dt;
     }
   }
 }
@@ -166,8 +161,7 @@ class VShmupAsteroid extends PositionComponent with CollisionCallbacks {
     if (position.y > gameHeight + _frameSize * scale.y) remove = true;
     if (position.x < -_frameSize * scale.x) remove = true;
     if (position.x > gameWidth + _frameSize * scale.x) remove = true;
-
-    if (remove) removeFromParent();
+    if (remove) reset();
   }
 
   static final alreadyCollided = <VShmupAsteroid>[];
