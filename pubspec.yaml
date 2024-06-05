@@ -48,4 +48,6 @@ flutter:
     - assets/images/projectiles/
     - assets/images/vshmup/
     - assets/tiles/
+  shaders:
+    - assets/shaders/asteroid.frag
   uses-material-design: true

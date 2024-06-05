@@ -134,3 +134,15 @@ extension RandomExtensions on Random {
 
   double nextDoublePM(double limit) => (nextDouble() - nextDouble()) * limit;
 }
+
+extension FragmentShaderExtensions on FragmentShader {
+  setVec4(int index, Color color) {
+    final r = color.red / 255 * color.opacity;
+    final g = color.green / 255 * color.opacity;
+    final b = color.blue / 255 * color.opacity;
+    setFloat(index + 0, r);
+    setFloat(index + 1, g);
+    setFloat(index + 2, b);
+    setFloat(index + 3, color.opacity);
+  }
+}
