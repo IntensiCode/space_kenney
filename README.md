@@ -16,4 +16,4 @@ Really still learning about Flame!
 
 Playable version should be available in the GitHub pages of this repo:
 
-https://daniellukic.github.io/space_kenney/
+https://intensicode.github.io/space_kenney/
