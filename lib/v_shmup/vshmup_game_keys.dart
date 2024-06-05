@@ -42,6 +42,22 @@ mixin VShmupGameKeys on KeyboardHandler {
   final held = <VShmupGameKey, bool>{}..addEntries(VShmupGameKey.values.map((it) => MapEntry(it, false)));
   final count = <VShmupGameKey, int>{}..addEntries(VShmupGameKey.values.map((it) => MapEntry(it, 0)));
 
+  bool get left => held[VShmupGameKey.left] == true;
+
+  bool get right => held[VShmupGameKey.right] == true;
+
+  bool get up => held[VShmupGameKey.up] == true;
+
+  bool get down => held[VShmupGameKey.down] == true;
+
+  bool get primaryFire => held[VShmupGameKey.primaryFire] == true;
+
+  bool get secondaryFire => held[VShmupGameKey.secondaryFire] == true;
+
+  bool isHeld(VShmupGameKey key) => held[key] == true;
+
+  bool hasCount(VShmupGameKey key) => count[key]! >= 0;
+
   // TODO clear before update? or manual? let's see..
 
   @override
