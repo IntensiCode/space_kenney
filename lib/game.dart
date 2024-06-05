@@ -10,7 +10,6 @@ import 'package:space_kenney/web_play_screen.dart';
 import 'core/common.dart';
 import 'core/soundboard.dart';
 import 'game_world.dart';
-import 'util/bitmap_font.dart';
 import 'util/fonts.dart';
 import 'util/performance.dart';
 
@@ -66,29 +65,8 @@ class SpaceKenneyGame extends FlameGame<GameWorld> with HasKeyboardHandlerCompon
 
   @override
   onLoad() async {
-    soundboard.preload();
-
-    fancyFont = await BitmapFont.loadDst(
-      images,
-      assets,
-      'fonts/fancyfont.png',
-      charWidth: 12,
-      charHeight: 10,
-    );
-    menuFont = await BitmapFont.loadDst(
-      images,
-      assets,
-      'fonts/menufont.png',
-      charWidth: 24,
-      charHeight: 24,
-    );
-    textFont = await BitmapFont.loadDst(
-      images,
-      assets,
-      'fonts/textfont.png',
-      charWidth: 12,
-      charHeight: 12,
-    );
+    await soundboard.preload();
+    await loadFonts(assets);
     _showInitialScreen();
   }
 
