@@ -114,26 +114,26 @@ class SpaceKenneyGame extends FlameGame<GameWorld>
         debug = !debug;
         return KeyEventResult.handled;
       }
-      if (event.character == 'L') {
-        world.previousChapter();
-        return KeyEventResult.handled;
-      }
-      if (event.character == 'l') {
-        world.nextChapter();
-        return KeyEventResult.handled;
-      }
+      // if (event.character == 'L') {
+      //   world.previousChapter();
+      //   return KeyEventResult.handled;
+      // }
+      // if (event.character == 'l') {
+      //   world.nextChapter();
+      //   return KeyEventResult.handled;
+      // }
       if (event.character == 'r') {
         world.showChapter1();
         return KeyEventResult.handled;
       }
-      if (event.character == 'S') {
-        if (_timeScale > 0.125) _timeScale /= 2;
-        return KeyEventResult.handled;
-      }
-      if (event.character == 's') {
-        if (_timeScale < 4.0) _timeScale *= 2;
-        return KeyEventResult.handled;
-      }
+      // if (event.character == 'S') {
+      //   if (_timeScale > 0.125) _timeScale /= 2;
+      //   return KeyEventResult.handled;
+      // }
+      // if (event.character == 's') {
+      //   if (_timeScale < 4.0) _timeScale *= 2;
+      //   return KeyEventResult.handled;
+      // }
       if (event.character == 't') {
         world.showTitle();
         return KeyEventResult.handled;
