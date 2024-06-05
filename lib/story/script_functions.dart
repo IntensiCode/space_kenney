@@ -213,7 +213,9 @@ mixin ScriptFunctions on Component, AutoDispose {
   }
 
   void backgroundMusic(String filename) async {
-    var volume = soundboard.musicVolume * soundboard.masterVolume;
+    filename = "background/$filename";
+
+    final volume = soundboard.musicVolume * soundboard.masterVolume;
 
     dispose('afterTenSeconds');
     dispose('backgroundMusic');
@@ -238,7 +240,7 @@ mixin ScriptFunctions on Component, AutoDispose {
 
   void playDialogAudio(String filename) async {
     final player = await FlameAudio.play(
-      filename,
+      'dialog/$filename',
       volume: soundboard.masterVolume,
     );
     autoDispose('playDialogAudio', () => player.stop());
