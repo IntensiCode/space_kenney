@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:dart_minilog/dart_minilog.dart';
-import 'package:flame/components.dart';
 import 'package:space_kenney/story/script_functions.dart';
+import 'package:space_kenney/util/auto_dispose.dart';
 
-class DirectScriptComponent extends Component with ScriptFunctions {
+class DirectScriptComponent extends AutoDisposeComponent with ScriptFunctions {
   final script = <Future Function()>[];
 
   StreamSubscription? active;

@@ -6,6 +6,7 @@ import 'package:flame/extensions.dart';
 import 'package:flutter/animation.dart';
 import 'package:space_kenney/core/common.dart';
 import 'package:space_kenney/core/soundboard.dart';
+import 'package:space_kenney/util/auto_dispose.dart';
 import 'package:space_kenney/util/debug.dart';
 import 'package:space_kenney/util/random.dart';
 
@@ -37,7 +38,7 @@ extension ScriptFunctionsExtension on ScriptFunctions {
   VShmupAsteroids asteroids() => added(VShmupAsteroids());
 }
 
-class VShmupAsteroids extends Component with ScriptFunctions {
+class VShmupAsteroids extends AutoDisposeComponent with ScriptFunctions {
   final _animations = <(SpriteAnimation, double)>[];
 
   double _releaseTime = 0;

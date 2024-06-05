@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:space_kenney/core/common.dart';
+import 'package:space_kenney/util/auto_dispose.dart';
 import 'package:space_kenney/util/random.dart';
 
 import '../story/script_functions.dart';
@@ -17,7 +18,7 @@ extension ScriptFunctionsExtension on ScriptFunctions {
   VShmupMoons moons() => added(VShmupMoons());
 }
 
-class VShmupMoons extends Component with ScriptFunctions {
+class VShmupMoons extends AutoDisposeComponent with ScriptFunctions {
   static const scale = 1.0;
   static const opacity = 0.333;
   static const baseSpeed = 8;

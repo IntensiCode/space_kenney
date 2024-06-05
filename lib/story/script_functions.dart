@@ -8,6 +8,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/animation.dart';
+import 'package:space_kenney/util/auto_dispose.dart';
 
 import '../components/press_fire_to_start.dart';
 import '../core/common.dart';
@@ -21,7 +22,7 @@ import '../util/loading.dart';
 import 'story_dialog_component.dart';
 import 'subtitles_component.dart';
 
-mixin ScriptFunctions on Component {
+mixin ScriptFunctions on Component, AutoDispose {
   double dialogPosition = 8;
 
   final dialogOffsets = <String, double>{};

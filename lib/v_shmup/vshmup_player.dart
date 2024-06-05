@@ -1,5 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:space_kenney/util/auto_dispose.dart';
 import 'package:space_kenney/v_shmup/vshmup_asteroids.dart';
 
 import '../core/common.dart';
@@ -13,7 +14,9 @@ enum _PlayerState {
   //...
 }
 
-class VShmupPlayer extends PositionComponent with ScriptFunctions, KeyboardHandler, VShmupGameKeys, CollisionCallbacks {
+class VShmupPlayer extends PositionComponent
+    with AutoDispose, ScriptFunctions, KeyboardHandler, VShmupGameKeys, CollisionCallbacks {
+  //
   static final incomingSpeed = dev ? 100 : 20;
 
   late final xMovement = InputAcceleration(

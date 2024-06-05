@@ -1,11 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:space_kenney/util/auto_dispose.dart';
 import 'package:space_kenney/util/extensions.dart';
 import 'package:space_kenney/util/random.dart';
 
 import '../story/script_functions.dart';
 
-class VShmupExhaust extends PositionComponent with ScriptFunctions {
+class VShmupExhaust extends AutoDisposeComponent with ScriptFunctions {
   static const count = 10; // TODO depend on speed i guess?
 
   late final List<SpriteAnimation> _animations;

@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flutter/animation.dart';
+import 'package:space_kenney/util/auto_dispose.dart';
 
 import '../core/common.dart';
 import '../story/script_functions.dart';
@@ -17,7 +18,7 @@ extension ScriptFunctionsExtension on ScriptFunctions {
   VShmupStars stars() => added(VShmupStars());
 }
 
-class VShmupStars extends Component with ScriptFunctions {
+class VShmupStars extends AutoDisposeComponent with ScriptFunctions {
   //
   late final List<Star> stars;
 
