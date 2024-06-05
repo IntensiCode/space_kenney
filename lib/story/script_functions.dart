@@ -221,7 +221,9 @@ mixin ScriptFunctions on Component {
 
     final AudioPlayer player;
     if (dev) {
-      player = await FlameAudio.playLongAudio(filename, volume: volume);
+      await FlameAudio.bgm.play(filename, volume: volume);
+      player = FlameAudio.bgm.audioPlayer;
+
       // only in dev: fade out soonish, to avoid playing multiple times on hot restart.
       player.onPositionChanged.listen((it) {
         if (it.inSeconds < 10) return;
@@ -236,7 +238,8 @@ mixin ScriptFunctions on Component {
         }
       });
     } else {
-      player = await FlameAudio.loop(filename, volume: soundboard.masterVolume);
+      await FlameAudio.bgm.play(filename, volume: soundboard.masterVolume);
+      player = FlameAudio.bgm.audioPlayer;
     }
 
     late StreamSubscription fadeIn;
