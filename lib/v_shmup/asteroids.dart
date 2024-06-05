@@ -189,7 +189,9 @@ class Asteroid extends PositionComponent with CollisionCallbacks {
       dy = v1.y;
       other.dx = v2.x;
       other.dy = v2.y;
-      soundboard.play(Sound.asteroid_clash, volume: scale.x * other.scale.x);
+      onHit(other.scale.x);
     }
   }
+
+  void onHit(double relativeVolume) => soundboard.play(Sound.asteroid_clash, volume: scale.x * relativeVolume);
 }
