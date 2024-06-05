@@ -10,7 +10,7 @@ import '../v_shmup/vshmup_stars.dart';
 class Chapter1_Level1 extends DirectScriptComponent with KeyboardHandler, TapCallbacks {
   @override
   onLoad() async {
-    music('background/galactic_dreamers_alt.mp3');
+    backgroundMusic('background/galactic_dreamers_alt.mp3');
     stars();
     moons();
     at(1, () => subtitles(_kay1, 10, image: kay, audio: 'dialog/c1_l1_kay_1.ogg'));

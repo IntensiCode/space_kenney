@@ -32,7 +32,7 @@ class SplashScreen extends DirectScriptComponent with KeyboardHandler, TapCallba
     at(1.0, () => fadeIn(textXY('IntensiCode', 160, 120)));
     at(1.0, () => fadeIn(textXY('Presentation', 160, 140)));
     at(2.5, () => fadeOutAll());
-    at(1.0, () => playAudio('swoosh.ogg'));
+    at(1.0, () => playDialogAudio('swoosh.ogg'));
     at(0.1, () => add(anim));
     at(0.0, () => fadeIn(textXY('A', 160, 70)));
     at(0.0, () => fadeIn(textXY('Game', 160, 190)));

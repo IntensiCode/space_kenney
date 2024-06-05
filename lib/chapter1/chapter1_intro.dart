@@ -28,7 +28,7 @@ class Chapter1_Intro extends DirectScriptComponent with KeyboardHandler, TapCall
   onLoad() async {
     fadeIn(await spriteXY('chapter1.png', 160, 128));
 
-    at(1, () => playAudio('chapter_1_1_kenney.mp3'));
+    at(1, () => playDialogAudio('chapter_1_1_kenney.mp3'));
     at(0, () => subtitles(_kennyText1, 3.5, image: kenney));
     at(4.5, () => dialog(central, _centralText, audio: 'chapter_1_2_central.mp3'));
     at(8.5, () => dialog(kenney, _kennyText2, audio: 'chapter_1_3_kenney.ogg'));

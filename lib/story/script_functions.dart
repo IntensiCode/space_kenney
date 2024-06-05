@@ -45,7 +45,7 @@ mixin ScriptFunctions on Component {
     String? audio,
     Anchor anchor = Anchor.topLeft,
   }) {
-    if (audio != null) playAudio(audio);
+    if (audio != null) playDialogAudio(audio);
 
     final offset = dialogOffsets.putIfAbsent(portrait, _nextPortraitOffset);
     final it = StoryDialogComponent(portrait, text);
@@ -216,7 +216,7 @@ mixin ScriptFunctions on Component {
 
   static const fadeInSeconds = 3;
 
-  void music(String filename) async {
+  void backgroundMusic(String filename) async {
     var volume = soundboard.musicVolume * soundboard.masterVolume;
 
     final AudioPlayer player;
@@ -262,7 +262,7 @@ mixin ScriptFunctions on Component {
     stopAudio.add(stop);
   }
 
-  void playAudio(String filename) async {
+  void playDialogAudio(String filename) async {
     final player = await FlameAudio.play(
       filename,
       volume: soundboard.masterVolume,
@@ -284,7 +284,7 @@ mixin ScriptFunctions on Component {
   }
 
   void subtitles(String text, double? autoClearSeconds, {String? image, String? audio}) {
-    if (audio != null) playAudio(audio);
+    if (audio != null) playDialogAudio(audio);
     add(SubtitlesComponent(text, autoClearSeconds, image));
   }
 
