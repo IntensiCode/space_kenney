@@ -63,7 +63,7 @@ class VShmupAsteroids extends AutoDisposeComponent with ScriptFunctions {
     lastEmission += dt;
     final minReleaseInterval = 1 / sqrt(maxAsteroids);
     if (_releaseTime <= 0 || (children.length < maxAsteroids && lastEmission >= minReleaseInterval)) {
-      add(Asteroid(_animations));
+      add(VShmupAsteroid(_animations));
       lastEmission = 0;
       _releaseTime = 1 + random.nextDoubleLimit(2);
     } else {
@@ -72,7 +72,7 @@ class VShmupAsteroids extends AutoDisposeComponent with ScriptFunctions {
   }
 }
 
-class Asteroid extends PositionComponent with CollisionCallbacks {
+class VShmupAsteroid extends PositionComponent with CollisionCallbacks {
   //
   final List<(SpriteAnimation, double)> animations;
 
@@ -85,7 +85,7 @@ class Asteroid extends PositionComponent with CollisionCallbacks {
   late double dy;
   late double rotationSeconds;
 
-  Asteroid(this.animations) {
+  VShmupAsteroid(this.animations) {
     anchor = Anchor.center;
     size.setAll(_frameSize.toDouble());
 
@@ -170,12 +170,12 @@ class Asteroid extends PositionComponent with CollisionCallbacks {
     if (remove) removeFromParent();
   }
 
-  static final alreadyCollided = <Asteroid>[];
+  static final alreadyCollided = <VShmupAsteroid>[];
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is Asteroid) {
+    if (other is VShmupAsteroid) {
       if (alreadyCollided.contains(this)) return;
       if (alreadyCollided.contains(other)) return;
       alreadyCollided.add(this);

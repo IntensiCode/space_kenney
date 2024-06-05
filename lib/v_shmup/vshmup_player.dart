@@ -111,7 +111,7 @@ class VShmupPlayer extends PositionComponent
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is Asteroid) {
+    if (other is VShmupAsteroid) {
       other.onHit(0.5);
     }
   }
