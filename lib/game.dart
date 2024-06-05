@@ -3,17 +3,18 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:space_kenney/web_play_screen.dart';
 
 import 'core/common.dart';
 import 'core/soundboard.dart';
 import 'game_world.dart';
+import 'global_keys.dart';
 import 'util/fonts.dart';
 import 'util/performance.dart';
 
-class SpaceKenneyGame extends FlameGame<GameWorld> with HasKeyboardHandlerComponents, HasPerformanceTracker {
+class SpaceKenneyGame extends FlameGame<GameWorld>
+    with HasKeyboardHandlerComponents, GlobalKeys<GameWorld>, HasPerformanceTracker {
   //
   final _ticker = Ticker(ticks: 120);
 
@@ -68,54 +69,31 @@ class SpaceKenneyGame extends FlameGame<GameWorld> with HasKeyboardHandlerCompon
     await soundboard.preload();
     await loadFonts(assets);
     _showInitialScreen();
+    if (dev) {
+      onKey('<C-d>', () => _toggleDebug());
+      onKey('<C-0>', () => world.showTitle());
+      onKey('<C-1>', () => world.showChapter1());
+      onKey('<C-->', () => _slowDown());
+      onKey('<C-=>', () => _speedUp());
+      onKey('<C-S-+>', () => _speedUp());
+    }
+  }
+
+  _toggleDebug() {
+    debug = !debug;
+    return KeyEventResult.handled;
+  }
+
+  _slowDown() {
+    if (_timeScale > 0.125) _timeScale /= 2;
+  }
+
+  _speedUp() {
+    if (_timeScale < 4.0) _timeScale *= 2;
   }
 
   @override
   update(double dt) => _ticker.generateTicksFor(dt * _timeScale, (it) => super.update(it));
 
   double _timeScale = 1;
-
-  @override
-  KeyEventResult onKeyEvent(
-    KeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
-    if (!dev) {
-      return super.onKeyEvent(event, keysPressed);
-    }
-    if (event is KeyRepeatEvent) {
-      return KeyEventResult.skipRemainingHandlers;
-    }
-    if (event is KeyDownEvent) {
-      if (event.character == 'd') {
-        debug = !debug;
-        return KeyEventResult.handled;
-      }
-      // if (event.character == 'L') {
-      //   world.previousChapter();
-      //   return KeyEventResult.handled;
-      // }
-      // if (event.character == 'l') {
-      //   world.nextChapter();
-      //   return KeyEventResult.handled;
-      // }
-      if (event.character == 'r') {
-        world.showChapter1();
-        return KeyEventResult.handled;
-      }
-      // if (event.character == 'S') {
-      //   if (_timeScale > 0.125) _timeScale /= 2;
-      //   return KeyEventResult.handled;
-      // }
-      // if (event.character == 's') {
-      //   if (_timeScale < 4.0) _timeScale *= 2;
-      //   return KeyEventResult.handled;
-      // }
-      if (event.character == 't') {
-        world.showTitle();
-        return KeyEventResult.handled;
-      }
-    }
-    return super.onKeyEvent(event, keysPressed);
-  }
 }
