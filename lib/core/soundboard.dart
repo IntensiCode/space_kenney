@@ -9,6 +9,10 @@ enum Sound {
 
 final soundboard = Soundboard();
 
+double get musicVolume => soundboard.musicVolume * soundboard.masterVolume;
+
+double get soundVolume => soundboard.soundVolume * soundboard.masterVolume;
+
 class Soundboard {
   double masterVolume = 0.3;
   double musicVolume = 0.5;
