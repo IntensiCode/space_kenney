@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:dart_minilog/dart_minilog.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/sprite.dart';
@@ -213,57 +212,28 @@ mixin ScriptFunctions on Component, AutoDispose {
     return it;
   }
 
-  final stopAudio = <void Function()>[];
-
-  static const fadeInSeconds = 3;
-
   void backgroundMusic(String filename) async {
     var volume = soundboard.musicVolume * soundboard.masterVolume;
 
+    dispose('afterTenSeconds');
+    dispose('backgroundMusic');
+    dispose('backgroundMusic_fadeIn');
+
     final AudioPlayer player;
+
     if (dev) {
       await FlameAudio.bgm.play(filename, volume: volume);
       player = FlameAudio.bgm.audioPlayer;
 
-      // only in dev: fade out soonish, to avoid playing multiple times on hot restart.
-      player.onPositionChanged.listen((it) {
-        if (it.inSeconds < 10) return;
-
-        logInfo(volume);
-        player.setVolume(volume);
-        volume -= 0.1;
-
-        if (volume <=0) {
-          player.stop();
-          volume = 0;
-        }
-      });
+      // only in dev: stop music after 10 seconds, to avoid playing multiple times on hot restart.
+      final afterTenSeconds = player.onPositionChanged.where((it) => it.inSeconds >= 10).take(1);
+      autoDispose('afterTenSeconds', afterTenSeconds.listen((it) => player.stop()));
     } else {
-      await FlameAudio.bgm.play(filename, volume: soundboard.masterVolume);
+      await FlameAudio.bgm.play(filename, volume: volume);
       player = FlameAudio.bgm.audioPlayer;
     }
-
-    late StreamSubscription fadeIn;
-    player.setVolume(0);
-    fadeIn = player.onPositionChanged.listen((it) {
-      if (it.inSeconds < fadeInSeconds) {
-        player.setVolume(soundboard.musicVolume * it.inMilliseconds / (fadeInSeconds * 1000) * soundboard.musicVolume);
-      } else {
-        player.setVolume(soundboard.musicVolume * soundboard.musicVolume);
-        fadeIn.cancel();
-      }
-    });
-    fadeIn.onDone(() => logInfo('fadein done'));
-
-    late StreamSubscription onStop;
-    stop() => player.stop();
-    onStop = player.onPlayerComplete.listen((_) {
-      fadeIn.cancel();
-      stopAudio.remove(stop);
-      onStop.cancel();
-    });
-
-    stopAudio.add(stop);
+    autoDispose('backgroundMusic', () => player.stop());
+    autoDispose('backgroundMusic_fadeIn', player.fadeIn(volume, seconds: 3));
   }
 
   void playDialogAudio(String filename) async {
@@ -271,9 +241,7 @@ mixin ScriptFunctions on Component, AutoDispose {
       filename,
       volume: soundboard.masterVolume,
     );
-    stop() => player.stop();
-    player.onPlayerComplete.listen((_) => stopAudio.remove(stop));
-    stopAudio.add(stop);
+    autoDispose('playDialogAudio', () => player.stop());
   }
 
   void pressFireToStart() => add(PressFireToStart());
@@ -311,10 +279,13 @@ mixin ScriptFunctions on Component, AutoDispose {
     add(it);
     return it;
   }
+}
 
-  @override
-  void onRemove() {
-    super.onRemove();
-    stopAudio.forEach((it) => it());
+extension on AudioPlayer {
+  StreamSubscription fadeIn(double targetVolume, {double seconds = 3}) {
+    final steps = (seconds * 10).toInt();
+    return Stream.periodic(const Duration(milliseconds: 100), (it) => targetVolume * it / steps)
+        .take(steps)
+        .listen((it) => setVolume(it), onDone: () => setVolume(targetVolume));
   }
 }
