@@ -1,5 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/animation.dart';
 import 'package:space_kenney/util/auto_dispose.dart';
 import 'package:space_kenney/v_shmup/vshmup_asteroids.dart';
 
@@ -66,17 +67,19 @@ class VShmupPlayer extends PositionComponent
     _frame = 3;
   }
 
+  double _incoming = 0;
+
   @override
   void update(double dt) {
     super.update(dt);
     switch (_state) {
-      // TODO decelerate
       case _PlayerState.incoming:
-        if (position.y > 220) {
-          position.y -= dt * incomingSpeed;
-        } else {
-          _state = _PlayerState.playing;
-        }
+        _incoming += dt;
+
+        final t = _incoming.clamp(0, 1).toDouble();
+        final dy = Curves.decelerate.transform(t) * 60;
+        position.y = 280 - dy;
+        if (position.y <= 220) _state = _PlayerState.playing;
 
       case _PlayerState.playing:
         onPlaying(dt);
