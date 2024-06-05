@@ -5,7 +5,6 @@ enum Sound {
   asteroid_clash,
   explosion,
   game_over,
-  swoosh,
 }
 
 final soundboard = Soundboard();
