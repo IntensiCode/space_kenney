@@ -1,6 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:space_kenney/v_shmup/asteroids.dart';
+import 'package:space_kenney/v_shmup/vshmup_asteroids.dart';
 
 import '../core/common.dart';
 import '../story/script_functions.dart';

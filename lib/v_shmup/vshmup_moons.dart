@@ -14,10 +14,10 @@ final _fileSpec = [
 ];
 
 extension ScriptFunctionsExtension on ScriptFunctions {
-  MoonsBackground moons() => added(MoonsBackground());
+  VShmupMoons moons() => added(VShmupMoons());
 }
 
-class MoonsBackground extends Component with ScriptFunctions {
+class VShmupMoons extends Component with ScriptFunctions {
   static const scale = 1.0;
   static const opacity = 0.333;
   static const baseSpeed = 8;

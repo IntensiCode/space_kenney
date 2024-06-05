@@ -1,11 +1,11 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:space_kenney/v_shmup/asteroids.dart';
-import 'package:space_kenney/v_shmup/moons_background.dart';
+import 'package:space_kenney/v_shmup/vshmup_asteroids.dart';
+import 'package:space_kenney/v_shmup/vshmup_moons.dart';
 
 import '../core/common.dart';
 import '../story/direct_script_component.dart';
-import '../v_shmup/vertical_stars_background.dart';
+import '../v_shmup/vshmup_stars.dart';
 
 class Chapter1_Level1 extends DirectScriptComponent with KeyboardHandler, TapCallbacks {
   @override

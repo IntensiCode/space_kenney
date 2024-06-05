@@ -14,10 +14,11 @@ final _blinkiness = 0.001 / _count;
 final _baseSpeeds = [1.5, 1.75, 1, 0.5, 1.25, 3, 0.75, 0.75, 0.75];
 
 extension ScriptFunctionsExtension on ScriptFunctions {
-  VerticalStarsBackground stars() => added(VerticalStarsBackground());
+  VShmupStars stars() => added(VShmupStars());
 }
 
-class VerticalStarsBackground extends Component with ScriptFunctions {
+class VShmupStars extends Component with ScriptFunctions {
+  //
   late final List<Star> stars;
 
   @override

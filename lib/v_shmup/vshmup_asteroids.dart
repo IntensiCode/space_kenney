@@ -34,10 +34,10 @@ final _fileSpec = [
 int _nextAnim = random.nextInt(_fileSpec.length);
 
 extension ScriptFunctionsExtension on ScriptFunctions {
-  Asteroids asteroids() => added(Asteroids());
+  VShmupAsteroids asteroids() => added(VShmupAsteroids());
 }
 
-class Asteroids extends Component with ScriptFunctions {
+class VShmupAsteroids extends Component with ScriptFunctions {
   final _animations = <(SpriteAnimation, double)>[];
 
   double _releaseTime = 0;
