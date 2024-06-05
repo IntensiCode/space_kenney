@@ -22,8 +22,17 @@ class Soundboard {
     }
   }
 
-  play(Sound sound, {double? volume}) {
+  int _activeSounds = 0;
+
+  play(Sound sound, {double? volume}) async {
+    if (_activeSounds >= 10) {
+      logWarn('sound overload');
+      return;
+    }
+    _activeSounds++;
     volume ??= soundVolume;
-    FlameAudio.play('${sound.name}.ogg', volume: volume * masterVolume);
+    final player = await FlameAudio.play('${sound.name}.ogg', volume: volume * masterVolume);
+    await player.onPlayerComplete.first;
+    _activeSounds--;
   }
 }
