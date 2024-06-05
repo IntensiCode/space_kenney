@@ -7,7 +7,7 @@ import '../core/common.dart';
 import '../story/direct_script_component.dart';
 import '../v_shmup/vshmup_stars.dart';
 
-class Chapter1_Level1 extends DirectScriptComponent with KeyboardHandler, TapCallbacks {
+class Chapter1_Level1 extends DirectScriptComponent with HasCollisionDetection, KeyboardHandler, TapCallbacks {
   @override
   onLoad() async {
     backgroundMusic('background/galactic_dreamers_alt.mp3');
