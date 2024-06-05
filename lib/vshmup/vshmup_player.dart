@@ -2,7 +2,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/animation.dart';
 import 'package:space_kenney/util/auto_dispose.dart';
-import 'package:space_kenney/v_shmup/vshmup_asteroids.dart';
+import 'package:space_kenney/vshmup/vshmup_asteroids.dart';
 
 import '../core/common.dart';
 import '../story/script_functions.dart';

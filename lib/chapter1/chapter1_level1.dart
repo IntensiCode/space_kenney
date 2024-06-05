@@ -1,12 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:space_kenney/v_shmup/vshmup_asteroids.dart';
-import 'package:space_kenney/v_shmup/vshmup_moons.dart';
+import 'package:space_kenney/vshmup/vshmup_asteroids.dart';
+import 'package:space_kenney/vshmup/vshmup_moons.dart';
 
 import '../core/common.dart';
 import '../story/direct_script_component.dart';
-import '../v_shmup/vshmup_player.dart';
-import '../v_shmup/vshmup_stars.dart';
+import '../vshmup/vshmup_player.dart';
+import '../vshmup/vshmup_stars.dart';
 
 class Chapter1_Level1 extends DirectScriptComponent with HasCollisionDetection, KeyboardHandler, TapCallbacks {
   @override
