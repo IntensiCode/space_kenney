@@ -7,6 +7,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/animation.dart';
+import 'package:space_kenney/story/hint_component.dart';
 import 'package:space_kenney/util/auto_dispose.dart';
 
 import '../components/press_fire_to_start.dart';
@@ -121,6 +122,8 @@ mixin ScriptFunctions on Component, AutoDispose {
       target?.add(RemoveEffect(delay: 1));
     }
   }
+
+  void hint(String text, double autoClearSeconds) => add(HintComponent(text, autoClearSeconds));
 
   Future<SpriteAnimation> loadAnimWH(
     String filename,
