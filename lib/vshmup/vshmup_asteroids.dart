@@ -6,12 +6,14 @@ import 'package:flame/extensions.dart';
 import 'package:flutter/animation.dart';
 import 'package:space_kenney/core/common.dart';
 import 'package:space_kenney/core/soundboard.dart';
+import 'package:space_kenney/particles/smoke.dart';
 import 'package:space_kenney/util/auto_dispose.dart';
 import 'package:space_kenney/util/debug.dart';
 import 'package:space_kenney/util/random.dart';
 
 import '../story/script_functions.dart';
 import '../util/extensions.dart';
+import 'vshmup_common.dart';
 
 const _positionDistribution = Curves.easeInOutCubic;
 
@@ -61,32 +63,106 @@ class VShmupAsteroids extends AutoDisposeComponent with ScriptFunctions {
     lastEmission += dt;
     final minReleaseInterval = 1 / sqrt(maxAsteroids);
     if (children.length < maxAsteroids && lastEmission >= minReleaseInterval) {
-      add(VShmupAsteroid(_animations));
+      add(VShmupAsteroid(_animations, spawnOff));
       lastEmission = 0;
     }
   }
+
+  void spawnOff(VShmupAsteroid it) => add(VShmupAsteroid.cloned(it));
 }
 
-class VShmupAsteroid extends PositionComponent with CollisionCallbacks {
+class VShmupAsteroid extends PositionComponent with CollisionCallbacks, VShmupTarget {
   //
   final List<(SpriteAnimation, double)> animations;
+  final void Function(VShmupAsteroid) spawnOff;
 
   late SpriteAnimationComponent sprite;
   late CircleHitbox hitbox;
 
   late int frames;
   late bool xFlipped;
+  late double initialScale;
   late double dx;
   late double dy;
   late double rotationSeconds;
+  late double damage;
 
-  VShmupAsteroid(this.animations) {
-    anchor = Anchor.center;
+  static double damagePerScaleUnit = 100;
+
+  // todo pool? probably.. test first..
+  bool dieOff = false;
+
+  double get maxDamage => damagePerScaleUnit * initialScale;
+
+  int get forceIndex => scale.x ~/ 0.25;
+
+  @override
+  Component get visual => sprite;
+
+  @override
+  bool applyDamage({double? laser, double? kinetic}) {
+    if (laser != null) damage += laser;
+    if (kinetic != null) damage += kinetic;
+
+    final before = forceIndex;
+    if (before < 2) damage *= 1.1;
+    if (before < 1) damage *= 1.1;
+
+    final maxDamage = damagePerScaleUnit * initialScale;
+    if (damage > maxDamage) damage = maxDamage;
+
+    final remaining = 1 - damage / (damagePerScaleUnit * initialScale);
+    if (remaining < 0.1) {
+      smokeAround(position, size * remaining, parent: parent!);
+      reset();
+      return true;
+    }
+
+    scale.setAll(remaining * initialScale);
+
+    final after = forceIndex;
+    if (before == after) return false;
+
+    if (after > 1) {
+      onHit(scale.x);
+
+      damage = 0;
+      initialScale /= 2;
+      scale.setAll(initialScale);
+
+      final diff = randomNormalizedVector();
+      dx = -dx * 2 + diff.x * 20;
+      dy = -diff.y * 0.75;
+      if (dx.abs() < 10) {
+        const forced = 8.0;
+        dx = random.nextBool() //
+            ? forced + random.nextDoubleLimit(forced) //
+            : -forced - random.nextDoubleLimit(forced);
+      }
+
+      spawnOff(this);
+    }
+    return false;
+  }
+
+  factory VShmupAsteroid.cloned(VShmupAsteroid it) {
+    final result = VShmupAsteroid(it.animations, it.spawnOff);
+    result.initialScale = it.initialScale;
+    result.scale.setFrom(it.scale * (0.5 + random.nextDoubleLimit(0.5)));
+    result.position.setFrom(it.position);
+    result.dx = -it.dx + random.nextDoublePM(2);
+    result.dy = it.dy + random.nextDoublePM(2);
+    result.dieOff = true;
+    return result;
+  }
+
+  VShmupAsteroid(this.animations, this.spawnOff) {
+    anchor = Anchor.topLeft;
     size.setAll(_frameSize.toDouble());
 
-    add(DebugCircleHitbox(radius: 6, anchor: Anchor.center));
     sprite = added(SpriteAnimationComponent(anchor: Anchor.center));
     hitbox = added(CircleHitbox(radius: 6, anchor: Anchor.center, isSolid: true));
+    add(DebugCircleHitbox(radius: 6, anchor: Anchor.center));
 
     reset();
 
@@ -108,7 +184,10 @@ class VShmupAsteroid extends PositionComponent with CollisionCallbacks {
     if (xFlipped != sprite.isFlippedHorizontally) sprite.flipHorizontallyAroundCenter();
   }
 
-  _pickScale() => scale.setAll(0.25 + random.nextDoubleLimit(0.75));
+  _pickScale() {
+    initialScale = 0.5 + random.nextDoubleLimit(0.5);
+    scale.setAll(initialScale);
+  }
 
   _pickTint() => sprite.tint(Color(0x20000000 + random.nextInt(0xffffff)));
 
@@ -136,6 +215,7 @@ class VShmupAsteroid extends PositionComponent with CollisionCallbacks {
   }
 
   reset() {
+    damage = 0;
     _pickAnimation();
     _pickFlipped();
     _pickScale();
@@ -161,7 +241,15 @@ class VShmupAsteroid extends PositionComponent with CollisionCallbacks {
     if (position.y > gameHeight + _frameSize * scale.y) remove = true;
     if (position.x < -_frameSize * scale.x) remove = true;
     if (position.x > gameWidth + _frameSize * scale.x) remove = true;
-    if (remove) reset();
+
+    // special case of parts drifting upwards:
+    if (position.y < -_frameSize * 4) remove = true;
+
+    if (remove && dieOff) {
+      removeFromParent();
+    } else if (remove) {
+      reset();
+    }
   }
 
   static final alreadyCollided = <VShmupAsteroid>[];
@@ -185,6 +273,16 @@ class VShmupAsteroid extends PositionComponent with CollisionCallbacks {
       other.dx = v2.x;
       other.dy = v2.y;
       onHit(other.scale.x);
+      if (forceIndex > 1 && other.forceIndex > 1) {
+        if (forceIndex < other.forceIndex) {
+          applyDamage(kinetic: (maxDamage - damage) / 2);
+        } else if (forceIndex > other.forceIndex) {
+          other.applyDamage(kinetic: (other.maxDamage - other.damage) / 2);
+        } else {
+          applyDamage(kinetic: (maxDamage - damage) / 4);
+          other.applyDamage(kinetic: (other.maxDamage - other.damage) / 4);
+        }
+      }
     }
   }
 
