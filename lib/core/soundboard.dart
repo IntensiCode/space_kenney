@@ -7,7 +7,8 @@ import 'common.dart';
 enum Sound {
   asteroid_clash,
   explosion,
-  game_over,
+  mining_laser,
+  strangeness,
 }
 
 final soundboard = Soundboard();
@@ -36,7 +37,7 @@ class Soundboard {
   preload() async {
     for (final it in Sound.values) {
       logInfo('cache $it');
-      await FlameAudio.audioCache.load('${it.name}.ogg');
+      await FlameAudio.audioCache.load('effect/${it.name}.ogg');
     }
   }
 
@@ -69,7 +70,7 @@ class Soundboard {
         player.dispose();
       }
 
-      final it = await FlameAudio.play('${sound.name}.ogg', volume: volume * master);
+      final it = await FlameAudio.play('effect/${sound.name}.ogg', volume: volume * master);
       it.setPlayerMode(PlayerMode.lowLatency);
       it.setReleaseMode(ReleaseMode.stop);
       it.onPlayerStateChanged.listen((it) {

@@ -39,6 +39,7 @@ flutter:
     - assets/audio/
     - assets/audio/background/
     - assets/audio/dialog/
+    - assets/audio/effect/
     - assets/fonts/
     - assets/images/
     - assets/images/celestials/
