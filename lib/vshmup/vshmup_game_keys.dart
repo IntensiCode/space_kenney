@@ -17,14 +17,14 @@ enum VShmupGameKey {
 mixin VShmupGameKeys on KeyboardHandler {
   // just guessing for now what i may need... doesn't matter.. just to have something for now..
 
-  static final leftKeys = ['Arrow Left', 'a'];
-  static final rightKeys = ['Arrow Right', 'd'];
-  static final downKeys = ['Arrow Down', 's'];
-  static final upKeys = ['Arrow Up', 'w'];
-  static final primaryFireKeys = ['Control Left', 'Control Right', 'Control', ' ', 'j'];
-  static final secondaryFireKeys = ['Shift Left', 'Shift Right', 'Shift', 'k'];
-  static final inventoryKeys = ['Tab', 'Home', 'i'];
-  static final useOrExecuteKeys = ['End', 'u'];
+  static final leftKeys = ['Arrow Left', 'A'];
+  static final rightKeys = ['Arrow Right', 'D'];
+  static final downKeys = ['Arrow Down', 'S'];
+  static final upKeys = ['Arrow Up', 'W'];
+  static final primaryFireKeys = ['Control', 'Space', 'J'];
+  static final secondaryFireKeys = ['Shift', 'K'];
+  static final inventoryKeys = ['Tab', 'Home', 'I'];
+  static final useOrExecuteKeys = ['End', 'U'];
 
   static final mapping = {
     VShmupGameKey.left: leftKeys,
@@ -60,26 +60,37 @@ mixin VShmupGameKeys on KeyboardHandler {
 
   // TODO clear before update? or manual? let's see..
 
+  String label(LogicalKeyboardKey key) {
+    final s = key.synonyms.singleOrNull;
+    if (s != null) return label(s);
+
+    final check = key.keyLabel;
+    if (check == ' ') return 'Space';
+    return check;
+  }
+
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (event is KeyRepeatEvent) {
       return true; // super.onKeyEvent(event, keysPressed);
     }
     if (event case KeyDownEvent it) {
+      final check = label(it.logicalKey);
       for (final entry in mapping.entries) {
         final key = entry.key;
         final keys = entry.value;
-        if (keys.contains(it.logicalKey.keyLabel)) {
+        if (keys.contains(check)) {
           if (held[key] == false) count.update(key, (it) => it + 1);
           held[key] = true;
         }
       }
     }
     if (event case KeyUpEvent it) {
+      final check = label(it.logicalKey);
       for (final entry in mapping.entries) {
         final key = entry.key;
         final keys = entry.value;
-        if (keys.contains(it.logicalKey.keyLabel)) {
+        if (keys.contains(check)) {
           held[key] = false;
         }
       }
