@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:space_kenney/vshmup/vshmup_asteroids.dart';
+import 'package:space_kenney/vshmup/vshmup_game_keys.dart';
 import 'package:space_kenney/vshmup/vshmup_moons.dart';
 
 import '../core/common.dart';
@@ -16,6 +17,7 @@ class Chapter1_Level1 extends DirectScriptComponent with HasCollisionDetection, 
     moons();
     at(1, () => subtitles(_kay1, 10, image: kay, audio: 'c1_l1_kay_1.ogg'));
     at(10.5, () => subtitles(_kenney1, 3, image: kenney, audio: 'c1_l1_kenney_1.mp3'));
+    at(3, () => hint(_miningLaser, 10));
     at(3, () => add(VShmupPlayer()));
     at(2, () => asteroids());
   }
@@ -25,4 +27,8 @@ class Chapter1_Level1 extends DirectScriptComponent with HasCollisionDetection, 
       'to replenish our supplies.';
 
   final _kenney1 = 'Understood. Switching to mining laser for now.';
+
+  final _miningLaser = 'The mining laser auto targets within its field of view. '
+      'It is attached at the center below your ship. Watch the heat. '
+      'Keys: ${VShmupGameKeys.primaryFireKeys}';
 }
