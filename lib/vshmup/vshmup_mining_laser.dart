@@ -6,6 +6,7 @@ import 'package:flame/geometry.dart';
 import 'package:space_kenney/core/common.dart';
 import 'package:space_kenney/particles/smoke.dart';
 
+import '../core/soundboard.dart';
 import '../util/random.dart';
 import 'vshmup_common.dart';
 import 'vshmup_game_keys.dart';
@@ -38,6 +39,7 @@ class VShmupMiningLaser extends Component {
     if (target != _targeted) {
       _clearTargeted();
       _targeted = target;
+      if (target != null) soundboard.play(Sound.mining_laser);
     }
 
     if (target != null) {
