@@ -50,4 +50,6 @@ flutter:
     - assets/tiles/
   shaders:
     - assets/shaders/asteroid.frag
+    - assets/shaders/moon.frag
+    - assets/shaders/moon_crater.frag
   uses-material-design: true
