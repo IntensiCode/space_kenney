@@ -5,7 +5,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/animation.dart';
 import 'package:space_kenney/story/hint_component.dart';
 import 'package:space_kenney/util/auto_dispose.dart';
@@ -233,10 +232,7 @@ mixin ScriptFunctions on Component, AutoDispose {
   }
 
   void playDialogAudio(String filename) async {
-    final player = await FlameAudio.play(
-      'dialog/$filename',
-      volume: soundboard.master,
-    );
+    final player = await soundboard.playDialogAudio(filename);
     autoDispose('playDialogAudio', () => player.stop());
   }
 
