@@ -218,26 +218,18 @@ mixin ScriptFunctions on Component, AutoDispose {
   void backgroundMusic(String filename) async {
     filename = "background/$filename";
 
-    final volume = soundboard.musicVolume * soundboard.masterVolume;
-
     dispose('afterTenSeconds');
     dispose('backgroundMusic');
     dispose('backgroundMusic_fadeIn');
 
-    final AudioPlayer player;
-
+    final AudioPlayer player = await soundboard.playBackgroundMusic(filename);
     if (dev) {
-      player = await FlameAudio.playLongAudio(filename, volume: volume);
-
       // only in dev: stop music after 10 seconds, to avoid playing multiple times on hot restart.
       final afterTenSeconds = player.onPositionChanged.where((it) => it.inSeconds >= 10).take(1);
       autoDispose('afterTenSeconds', afterTenSeconds.listen((it) => player.stop()));
-    } else {
-      await FlameAudio.bgm.play(filename, volume: volume);
-      player = FlameAudio.bgm.audioPlayer;
     }
     autoDispose('backgroundMusic', () => player.stop());
-    autoDispose('backgroundMusic_fadeIn', player.fadeIn(volume, seconds: 3));
+    autoDispose('backgroundMusic_fadeIn', player.fadeIn(musicVolume, seconds: 3));
   }
 
   void playDialogAudio(String filename) async {
