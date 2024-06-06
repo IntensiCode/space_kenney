@@ -17,6 +17,7 @@ double get musicVolume => soundboard.music * soundboard.master;
 class Soundboard {
   double master = 0.3;
   double music = 0.5;
+  double voice = 0.8;
   double sound = 0.8;
 
   bool muted = false;
@@ -25,8 +26,10 @@ class Soundboard {
     muted = !muted;
     if (muted) {
       if (_bgm?.state == PlayerState.playing) _bgm?.pause();
+      _dialog?.setVolume(0);
     } else {
       if (_bgm?.state == PlayerState.paused) _bgm?.resume();
+      _dialog?.setVolume(voice * master);
     }
   }
 
@@ -114,6 +117,15 @@ class Soundboard {
     if (muted) _bgm!.pause();
 
     return _bgm!;
+  }
+
+  AudioPlayer? _dialog;
+
+  Future<AudioPlayer> playDialogAudio(String filename) async {
+    _dialog?.stop();
+    _dialog = await FlameAudio.play('dialog/$filename', volume: voice * master);
+    if (muted) _dialog!.setVolume(0);
+    return _dialog!;
   }
 }
 
