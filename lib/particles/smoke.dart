@@ -31,7 +31,7 @@ class Smoke extends SpriteAnimationComponent {
   @override
   Future<void> onLoad() async {
     animation = await game.loadSpriteAnimation(
-      'smoke.png',
+      'particles/smoke.png',
       SpriteAnimationData.sequenced(
         stepTime: 0.1,
         amount: 6,
