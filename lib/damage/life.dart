@@ -45,7 +45,7 @@ mixin Life {
     it.add(RemoveEffect(delay: 0.25));
     soundboard.play(_deathSound);
     for (var i = 0; i < 10; i++) {
-      smokeAt(it.position + randomNormalizedVector() * it.size.x / 2);
+      // smokeAt(it.position + randomNormalizedVector() * it.size.x / 2);
     }
   }
 }

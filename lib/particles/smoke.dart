@@ -3,19 +3,19 @@ import 'package:flame/components.dart';
 import '../core/common.dart';
 import '../util/random.dart';
 
-Smoke smokeAt(Vector2 position) {
+Smoke smokeAt(Vector2 position, {required Component parent}) {
   final smoke = Smoke(position: position);
-  // level.add(smoke);
+  parent.add(smoke);
   return smoke;
 }
 
-void smokeAround(Vector2 position, Vector2 size, [int? count]) {
+void smokeAround(Vector2 position, Vector2 size, {int? count, required Component parent}) {
   count ??= size.x ~/ 4;
   repeat(count, (_) {
     final at = randomNormalizedVector();
     at.x *= size.x;
     at.y *= size.y;
-    // level.add(Smoke(position: position + at));
+    parent.add(Smoke(position: position + at));
   });
 }
 
