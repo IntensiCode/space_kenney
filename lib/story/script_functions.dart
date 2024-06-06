@@ -227,8 +227,7 @@ mixin ScriptFunctions on Component, AutoDispose {
     final AudioPlayer player;
 
     if (dev) {
-      await FlameAudio.bgm.play(filename, volume: volume);
-      player = FlameAudio.bgm.audioPlayer;
+      player = await FlameAudio.playLongAudio(filename, volume: volume);
 
       // only in dev: stop music after 10 seconds, to avoid playing multiple times on hot restart.
       final afterTenSeconds = player.onPositionChanged.where((it) => it.inSeconds >= 10).take(1);
