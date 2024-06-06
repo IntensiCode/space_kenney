@@ -8,6 +8,7 @@ import '../core/common.dart';
 import '../story/script_functions.dart';
 import '../util/input_acceleration.dart';
 import 'vshmup_game_keys.dart';
+import 'vshmup_mining_laser.dart';
 
 enum _PlayerState {
   incoming,
@@ -35,18 +36,26 @@ class VShmupPlayer extends PositionComponent
   late SpriteAnimationComponent ship;
   late SpriteAnimationComponent booster;
 
+  // TODO weapon system instead! also: hud!
+  late Component _primaryWeapon;
+
   var _state = _PlayerState.incoming;
 
   @override
   void onLoad() async {
     priority = 100;
 
-    final shipFrames = await loadAnimWH('vshmup/player.png', 48, 48);
+    parent!.add(_primaryWeapon = VShmupMiningLaser(this, this));
+
+    final shipFrames = await loadAnimWH('vshmup/player.png', 64, 64);
     add(ship = makeAnimXY(shipFrames, 0, 0)..playing = false);
     ship.playing = false;
+    ship.priority = 101;
 
     final boosterFrames = await loadAnimWH('vshmup/player_small_boosters.png', 16, 10);
-    add(booster = makeAnimXY(boosterFrames, 1, 21));
+    add(booster = makeAnimXY(boosterFrames, 0, 26));
+    booster.scale.setAll(1.8);
+    booster.priority = 99;
 
     final hBox = RectangleHitbox(anchor: Anchor.topCenter);
     hBox.y += 2;
@@ -102,7 +111,7 @@ class VShmupPlayer extends PositionComponent
     }
 
     yMovement.targetFrame;
-    booster.scale.setAll(1 - 0.2 * yMovement.targetFrame);
+    booster.scale.setAll(1.8 - 0.2 * yMovement.targetFrame);
   }
 
   int get _frame => ship.animationTicker?.currentIndex ?? 3;
