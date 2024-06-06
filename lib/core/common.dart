@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/cache.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
@@ -42,6 +43,7 @@ bool dev = kDebugMode;
 
 late Game game;
 late Images images;
+late CollisionDetection collisions;
 
 enum Screen {
   chapter1,

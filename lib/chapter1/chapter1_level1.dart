@@ -12,6 +12,8 @@ import '../vshmup/vshmup_stars.dart';
 class Chapter1_Level1 extends DirectScriptComponent with HasCollisionDetection, KeyboardHandler, TapCallbacks {
   @override
   onLoad() async {
+    collisions = collisionDetection;
+
     backgroundMusic('galactic_dreamers_alt.mp3');
     stars();
     moons();
