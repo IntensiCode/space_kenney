@@ -71,6 +71,7 @@ class SpaceKenneyGame extends FlameGame<GameWorld>
     _showInitialScreen();
     if (dev) {
       onKey('<C-d>', () => _toggleDebug());
+      onKey('<C-m>', () => soundboard.toggleMute());
       onKey('<C-0>', () => world.showTitle());
       onKey('<C-1>', () => world.showChapter1());
       onKey('<C-->', () => _slowDown());
