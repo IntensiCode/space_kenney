@@ -2,6 +2,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:dart_minilog/dart_minilog.dart';
 import 'package:flame_audio/flame_audio.dart';
 
+import 'common.dart';
+
 enum Sound {
   asteroid_clash,
   explosion,
@@ -19,6 +21,14 @@ class Soundboard {
   double musicVolume = 0.5;
   double soundVolume = 0.8;
 
+  bool muted = false;
+
+  toggleMute() {
+    muted = !muted;
+    if (muted && bgm?.state == PlayerState.playing) bgm?.pause();
+    if (!muted && bgm?.state == PlayerState.paused) bgm?.resume();
+  }
+
   preload() async {
     for (final it in Sound.values) {
       logInfo('cache $it');
@@ -29,6 +39,8 @@ class Soundboard {
   int _activeSounds = 0;
 
   play(Sound sound, {double? volume}) {
+    if (muted) return;
+
     volume ??= soundboard.soundVolume;
 
     if (_activeSounds >= _maxActive) {
@@ -80,4 +92,30 @@ class Soundboard {
 
   static const _maxActive = 10;
   static const _maxPooled = 50;
+
+  AudioPlayer? bgm;
+
+  Future<AudioPlayer> playBackgroundMusic(String filename) async {
+    bgm?.stop();
+
+    final volume = musicVolume * masterVolume;
+    if (dev) {
+      bgm = await FlameAudio.playLongAudio(filename, volume: volume);
+
+      // only in dev: stop music after 10 seconds, to avoid playing multiple times on hot restart.
+      // final afterTenSeconds = player.onPositionChanged.where((it) => it.inSeconds >= 10).take(1);
+      // autoDispose('afterTenSeconds', afterTenSeconds.listen((it) => player.stop()));
+    } else {
+      await FlameAudio.bgm.play(filename, volume: volume);
+      bgm = FlameAudio.bgm.audioPlayer;
+    }
+
+    if (muted) bgm!.pause();
+
+    return bgm!;
+  }
 }
+
+// TODO Replace AudioPlayer result type with AudioHandle to change stop into fade out etc
+
+// TODO Really... it all has to be handled in here somehow...
