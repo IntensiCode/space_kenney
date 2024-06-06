@@ -235,7 +235,7 @@ mixin ScriptFunctions on Component, AutoDispose {
   void playDialogAudio(String filename) async {
     final player = await FlameAudio.play(
       'dialog/$filename',
-      volume: soundboard.masterVolume,
+      volume: soundboard.master,
     );
     autoDispose('playDialogAudio', () => player.stop());
   }

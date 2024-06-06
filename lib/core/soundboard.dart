@@ -12,21 +12,22 @@ enum Sound {
 
 final soundboard = Soundboard();
 
-double get musicVolume => soundboard.musicVolume * soundboard.masterVolume;
-
-double get soundVolume => soundboard.soundVolume * soundboard.masterVolume;
+double get musicVolume => soundboard.music * soundboard.master;
 
 class Soundboard {
-  double masterVolume = 0.3;
-  double musicVolume = 0.5;
-  double soundVolume = 0.8;
+  double master = 0.3;
+  double music = 0.5;
+  double sound = 0.8;
 
   bool muted = false;
 
   toggleMute() {
     muted = !muted;
-    if (muted && bgm?.state == PlayerState.playing) bgm?.pause();
-    if (!muted && bgm?.state == PlayerState.paused) bgm?.resume();
+    if (muted) {
+      if (_bgm?.state == PlayerState.playing) _bgm?.pause();
+    } else {
+      if (_bgm?.state == PlayerState.paused) _bgm?.resume();
+    }
   }
 
   preload() async {
@@ -41,7 +42,7 @@ class Soundboard {
   play(Sound sound, {double? volume}) {
     if (muted) return;
 
-    volume ??= soundboard.soundVolume;
+    volume ??= soundboard.sound;
 
     if (_activeSounds >= _maxActive) {
       logWarn('sound overload');
@@ -65,7 +66,7 @@ class Soundboard {
         player.dispose();
       }
 
-      final it = await FlameAudio.play('${sound.name}.ogg', volume: volume * masterVolume);
+      final it = await FlameAudio.play('${sound.name}.ogg', volume: volume * master);
       it.setPlayerMode(PlayerMode.lowLatency);
       it.setReleaseMode(ReleaseMode.stop);
       it.onPlayerStateChanged.listen((it) {
@@ -83,7 +84,7 @@ class Soundboard {
       final it = _pooledPlayers.removeAt(reuse);
       _pooledPlayers.add(it);
       final player = it.$2;
-      player.setVolume(volume * masterVolume);
+      player.setVolume(volume * master);
       player.resume();
     }
   }
@@ -93,26 +94,26 @@ class Soundboard {
   static const _maxActive = 10;
   static const _maxPooled = 50;
 
-  AudioPlayer? bgm;
+  AudioPlayer? _bgm;
 
   Future<AudioPlayer> playBackgroundMusic(String filename) async {
-    bgm?.stop();
+    _bgm?.stop();
 
-    final volume = musicVolume * masterVolume;
+    final volume = music * master;
     if (dev) {
-      bgm = await FlameAudio.playLongAudio(filename, volume: volume);
+      _bgm = await FlameAudio.playLongAudio(filename, volume: volume);
 
       // only in dev: stop music after 10 seconds, to avoid playing multiple times on hot restart.
       // final afterTenSeconds = player.onPositionChanged.where((it) => it.inSeconds >= 10).take(1);
       // autoDispose('afterTenSeconds', afterTenSeconds.listen((it) => player.stop()));
     } else {
       await FlameAudio.bgm.play(filename, volume: volume);
-      bgm = FlameAudio.bgm.audioPlayer;
+      _bgm = FlameAudio.bgm.audioPlayer;
     }
 
-    if (muted) bgm!.pause();
+    if (muted) _bgm!.pause();
 
-    return bgm!;
+    return _bgm!;
   }
 }
 
