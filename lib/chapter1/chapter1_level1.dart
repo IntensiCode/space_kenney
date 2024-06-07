@@ -14,7 +14,7 @@ class Chapter1_Level1 extends DirectScriptComponent with HasCollisionDetection, 
   onLoad() async {
     collisions = collisionDetection;
 
-    backgroundMusic('galactic_dreamers_alt.mp3');
+    backgroundMusic('galactic_dreamers.mp3');
     stars();
     moons();
     at(1, () => subtitles(_kay1, 10, image: kay, audio: 'c1_l1_kay_1.ogg'));
