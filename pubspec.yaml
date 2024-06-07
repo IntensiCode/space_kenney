@@ -53,4 +53,5 @@ flutter:
     - assets/shaders/asteroid.frag
     - assets/shaders/moon.frag
     - assets/shaders/moon_crater.frag
+    - assets/shaders/smoke.frag
   uses-material-design: true
