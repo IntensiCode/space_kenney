@@ -63,18 +63,34 @@ class VShmupAsteroids extends AutoDisposeComponent with ScriptFunctions {
     lastEmission += dt;
     final minReleaseInterval = 1 / sqrt(maxAsteroids);
     if (children.length < maxAsteroids && lastEmission >= minReleaseInterval) {
-      add(VShmupAsteroid(_animations, spawnOff));
+      add(pooledOrCreate()..randomizedStart());
       lastEmission = 0;
     }
   }
 
-  void spawnOff(VShmupAsteroid it) => add(VShmupAsteroid.cloned(it));
+  VShmupAsteroid pooledOrCreate() {
+    if (pooled.isEmpty) {
+      return VShmupAsteroid(_animations, spawnOff, backToPool);
+    } else {
+      return pooled.removeAt(0);
+    }
+  }
+
+  void spawnOff(VShmupAsteroid it) => add(pooledOrCreate()..breakOffFrom(it));
+
+  void backToPool(VShmupAsteroid it) {
+    it.removeFromParent();
+    pooled.add(it);
+  }
+
+  final pooled = <VShmupAsteroid>[];
 }
 
 class VShmupAsteroid extends PositionComponent with CollisionCallbacks, VShmupTarget {
   //
   final List<(SpriteAnimation, double)> animations;
   final void Function(VShmupAsteroid) spawnOff;
+  final void Function(VShmupAsteroid) backToPool;
 
   late SpriteAnimationComponent sprite;
   late CircleHitbox hitbox;
@@ -88,9 +104,6 @@ class VShmupAsteroid extends PositionComponent with CollisionCallbacks, VShmupTa
   late double damage;
 
   static double damagePerScaleUnit = 100;
-
-  // todo pool? probably.. test first..
-  bool dieOff = false;
 
   double get maxDamage => damagePerScaleUnit * initialScale;
 
@@ -114,7 +127,7 @@ class VShmupAsteroid extends PositionComponent with CollisionCallbacks, VShmupTa
     final remaining = 1 - damage / (damagePerScaleUnit * initialScale);
     if (remaining < 0.1) {
       smokeAround(position, size * remaining, parent: parent!);
-      reset();
+      backToPool(this);
       return true;
     }
 
@@ -145,18 +158,7 @@ class VShmupAsteroid extends PositionComponent with CollisionCallbacks, VShmupTa
     return false;
   }
 
-  factory VShmupAsteroid.cloned(VShmupAsteroid it) {
-    final result = VShmupAsteroid(it.animations, it.spawnOff);
-    result.initialScale = it.initialScale;
-    result.scale.setFrom(it.scale * (0.5 + random.nextDoubleLimit(0.5)));
-    result.position.setFrom(it.position);
-    result.dx = -it.dx + random.nextDoublePM(2);
-    result.dy = it.dy + random.nextDoublePM(2);
-    result.dieOff = true;
-    return result;
-  }
-
-  VShmupAsteroid(this.animations, this.spawnOff) {
+  VShmupAsteroid(this.animations, this.spawnOff, this.backToPool) {
     anchor = Anchor.topLeft;
     size.setAll(_frameSize.toDouble());
 
@@ -164,9 +166,27 @@ class VShmupAsteroid extends PositionComponent with CollisionCallbacks, VShmupTa
     hitbox = added(CircleHitbox(radius: 6, anchor: Anchor.center, isSolid: true));
     add(DebugCircleHitbox(radius: 6, anchor: Anchor.center));
 
-    reset();
-
     sprite.animationTicker?.onFrame = (_) => sprite.angle = 0;
+  }
+
+  randomizedStart() {
+    damage = 0;
+    _pickAnimation();
+    _pickFlipped();
+    _pickScale();
+    _pickTint();
+    _pickPosition();
+    _pickSpeed();
+    _pickRotation();
+  }
+
+  void breakOffFrom(VShmupAsteroid it) {
+    randomizedStart();
+    initialScale = it.initialScale;
+    scale.setFrom(it.scale * (0.5 + random.nextDoubleLimit(0.5)));
+    position.setFrom(it.position);
+    dx = -it.dx + random.nextDoublePM(2);
+    dy = it.dy + random.nextDoublePM(2);
   }
 
   _pickAnimation() {
@@ -214,17 +234,6 @@ class VShmupAsteroid extends PositionComponent with CollisionCallbacks, VShmupTa
     anim.stepTime = rotationSeconds / frames;
   }
 
-  reset() {
-    damage = 0;
-    _pickAnimation();
-    _pickFlipped();
-    _pickScale();
-    _pickTint();
-    _pickPosition();
-    _pickSpeed();
-    _pickRotation();
-  }
-
   @override
   void update(double dt) {
     alreadyCollided.clear();
@@ -245,11 +254,7 @@ class VShmupAsteroid extends PositionComponent with CollisionCallbacks, VShmupTa
     // special case of parts drifting upwards:
     if (position.y < -_frameSize * 4) remove = true;
 
-    if (remove && dieOff) {
-      removeFromParent();
-    } else if (remove) {
-      reset();
-    }
+    if (remove) backToPool(this);
   }
 
   static final alreadyCollided = <VShmupAsteroid>[];
