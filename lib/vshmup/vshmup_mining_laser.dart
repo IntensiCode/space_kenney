@@ -75,7 +75,7 @@ class VShmupMiningLaser extends Component {
     late double minDist;
     VShmupTarget? min;
     p.propagateToChildren<VShmupTarget>((it) {
-      if (it.position.y + it.size.y / 2 < 0) return true;
+      if (it.position.y + it.size.y * it.scale.x / 2 < 0) return true;
 
       final angle = ship.angleTo(it.position).abs();
       if (angle > pi / 8) return true;
