@@ -6,6 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/animation.dart';
+import 'package:space_kenney/core/messaging.dart';
 import 'package:space_kenney/story/hint_component.dart';
 import 'package:space_kenney/util/auto_dispose.dart';
 
@@ -21,12 +22,19 @@ import '../util/loading.dart';
 import 'story_dialog_component.dart';
 import 'subtitles_component.dart';
 
+class ScriptComponent extends AutoDisposeComponent with ScriptFunctions {}
+
 mixin ScriptFunctions on Component, AutoDispose {
   double dialogPosition = 8;
 
   final dialogOffsets = <String, double>{};
 
   final knownComponents = <String, dynamic>{};
+
+  void sendMessage(String key, dynamic data) => messaging.send(key, data);
+
+  void listen(String key, void Function((String, dynamic)) callback) =>
+      autoDispose('listen-$key', messaging.listen(key, callback));
 
   void clearByType(List types) {
     dialogPosition = 8;
