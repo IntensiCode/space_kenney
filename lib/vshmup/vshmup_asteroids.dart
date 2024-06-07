@@ -278,16 +278,6 @@ class VShmupAsteroid extends PositionComponent with CollisionCallbacks, VShmupTa
       other.dx = v2.x;
       other.dy = v2.y;
       onHit(other.scale.x);
-      if (forceIndex > 1 && other.forceIndex > 1) {
-        if (forceIndex < other.forceIndex) {
-          applyDamage(kinetic: (maxDamage - damage) / 2);
-        } else if (forceIndex > other.forceIndex) {
-          other.applyDamage(kinetic: (other.maxDamage - other.damage) / 2);
-        } else {
-          applyDamage(kinetic: (maxDamage - damage) / 4);
-          other.applyDamage(kinetic: (other.maxDamage - other.damage) / 4);
-        }
-      }
     }
   }
 
