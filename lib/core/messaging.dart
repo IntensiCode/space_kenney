@@ -14,15 +14,15 @@ extension ComponentExtension on Component {
 }
 
 mixin Messaging on Component {
-  final listeners = <String, List<Function((String, dynamic))>>{};
+  final listeners = <String, List<Function(dynamic)>>{};
 
-  Disposable listen(String key, void Function((String, dynamic)) callback) {
+  Disposable listen(String key, void Function(dynamic) callback) {
     listeners[key] ??= [];
     listeners[key]!.add(callback);
     return Disposable.wrap(() => listeners[key]?.remove(callback));
   }
 
-  void send(String key, dynamic message) => send_((key, message));
+  void send(String key, dynamic message) => listeners[key]?.forEach((it) => it(message));
 
   void send_((String, dynamic) message) => listeners[message.$1]?.forEach((it) => it(message));
 

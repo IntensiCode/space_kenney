@@ -59,7 +59,7 @@ class VShmupGems extends ScriptComponent {
   void onMount() {
     super.onMount();
     listen('spawn-gem', (message) {
-      final data = message.$2 as VShmupSpawnGem;
+      final data = message as VShmupSpawnGem;
       final which = data.kind?.toList() ?? VShmupGemKind.values;
       spawn(data.x, data.y, which.random(random), data.speed ?? 50);
     });

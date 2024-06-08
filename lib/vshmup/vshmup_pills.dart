@@ -59,7 +59,7 @@ class VShmupPills extends ScriptComponent {
   void onMount() {
     super.onMount();
     listen('spawn-pill', (message) {
-      final data = message.$2 as VShmupSpawnPill;
+      final data = message as VShmupSpawnPill;
       final which = data.kind?.toList() ?? VShmupPillKind.values;
       spawn(data.x, data.y, which.random(random), data.speed ?? 50);
     });

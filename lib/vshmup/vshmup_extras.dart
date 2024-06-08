@@ -72,7 +72,7 @@ class VShmupExtras extends ScriptComponent {
   void onMount() {
     super.onMount();
     listen('spawn-extra', (message) {
-      final data = message.$2 as VShmupSpawnExtra;
+      final data = message as VShmupSpawnExtra;
       final which = data.kind?.toList() ?? VShmupExtraKind.values;
       spawn(data.x, data.y, which.random(random), data.speed ?? 50);
     });

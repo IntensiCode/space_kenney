@@ -33,7 +33,7 @@ mixin ScriptFunctions on Component, AutoDispose {
 
   void sendMessage(String key, dynamic data) => messaging.send(key, data);
 
-  void listen(String key, void Function((String, dynamic)) callback) =>
+  void listen(String key, void Function(dynamic) callback) =>
       autoDispose('listen-$key', messaging.listen(key, callback));
 
   void clearByType(List types) {
