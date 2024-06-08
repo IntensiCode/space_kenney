@@ -21,7 +21,12 @@ enum _PlayerState {
 class VShmupPlayer extends PositionComponent
     with AutoDispose, ScriptFunctions, KeyboardHandler, VShmupGameKeys, CollisionCallbacks {
   //
-  static final incomingSpeed = dev ? 100 : 20;
+  static const incomingSpeed = gameHeight / 3;
+  static const yIncoming = gameHeight * 1.1;
+  static const xBase = gameWidth / 2;
+  static const yBase = gameHeight * 0.7;
+  static const yInitial = gameHeight * 0.15;
+  static const yLimit = gameHeight * 0.35;
 
   late final xMovement = InputAcceleration(
     goNegative: () => held[VShmupGameKey.left] == true,
@@ -31,8 +36,8 @@ class VShmupPlayer extends PositionComponent
   late final yMovement = InputAcceleration(
     goNegative: () => held[VShmupGameKey.up] == true,
     goPositive: () => held[VShmupGameKey.down] == true,
-    position: 40,
-    positionLimit: 80,
+    position: yInitial,
+    positionLimit: yLimit,
   );
 
   late SpriteAnimationComponent ship;
@@ -87,8 +92,8 @@ class VShmupPlayer extends PositionComponent
     vBox.height = ship.height / 3;
     add(vBox);
 
-    position.x = 160;
-    position.y = 280;
+    position.x = xBase;
+    position.y = yIncoming;
     anchor = Anchor.center;
     scale.setAll(0.5);
 
@@ -105,9 +110,9 @@ class VShmupPlayer extends PositionComponent
         _incoming += dt;
 
         final t = _incoming.clamp(0, 1).toDouble();
-        final dy = Curves.decelerate.transform(t) * 60;
-        position.y = 280 - dy;
-        if (position.y <= 220) _state = _PlayerState.playing;
+        final dy = Curves.decelerate.transform(t) * incomingSpeed;
+        position.y = yIncoming - dy;
+        if (position.y <= yBase + yInitial) _state = _PlayerState.playing;
 
       case _PlayerState.playing:
         onPlaying(dt);
@@ -118,8 +123,8 @@ class VShmupPlayer extends PositionComponent
   void onPlaying(double dt) {
     xMovement.update(dt);
     yMovement.update(dt);
-    position.x = 160 + xMovement.position;
-    position.y = 180 + yMovement.position;
+    position.x = xBase + xMovement.position;
+    position.y = yBase + yMovement.position;
 
     final target = xMovement.targetFrame + 3;
     if (_frameChangeTimer <= 0 && _frame != target) {
