@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 import 'package:space_kenney/core/common.dart';
 import 'package:space_kenney/particles/smoke.dart';
+import 'package:space_kenney/util/extensions.dart';
 
 import '../core/soundboard.dart';
 import '../util/random.dart';
@@ -32,8 +33,11 @@ class VShmupMiningLaser extends Component {
   void update(double dt) {
     super.update(dt);
 
-    scanAngle += dt * pi / 2 * scanDir;
-    if (scanAngle.abs() > pi / 8) scanDir = -scanDir;
+    scanAngle += dt * pi / 0.13781 * scanDir;
+    if (scanAngle.abs() > pi / 10) {
+      scanAngle = random.nextDoublePM(pi / 10);
+      scanDir = -scanDir;
+    }
 
     final target = keys.primaryFire ? _findTarget() : null;
     if (target != _targeted) {
