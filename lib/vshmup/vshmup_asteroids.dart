@@ -6,7 +6,6 @@ import 'package:flame/extensions.dart';
 import 'package:flutter/animation.dart';
 import 'package:space_kenney/core/common.dart';
 import 'package:space_kenney/core/soundboard.dart';
-import 'package:space_kenney/particles/smoke.dart';
 import 'package:space_kenney/util/auto_dispose.dart';
 import 'package:space_kenney/util/debug.dart';
 import 'package:space_kenney/util/random.dart';
@@ -14,6 +13,7 @@ import 'package:space_kenney/util/random.dart';
 import '../story/script_functions.dart';
 import '../util/extensions.dart';
 import 'vshmup_common.dart';
+import 'vshmup_extras.dart';
 
 const _positionDistribution = Curves.easeInOutCubic;
 
@@ -126,7 +126,6 @@ class VShmupAsteroid extends PositionComponent with CollisionCallbacks, VShmupTa
 
     final remaining = 1 - damage / (damagePerScaleUnit * initialScale);
     if (remaining < 0.1) {
-      smokeAround(position, size * remaining, parent: parent!);
       backToPool(this);
       return true;
     }
@@ -154,6 +153,9 @@ class VShmupAsteroid extends PositionComponent with CollisionCallbacks, VShmupTa
       }
 
       spawnOff(this);
+
+      final which = {VShmupExtraKind.energy_plus, VShmupExtraKind.integrity_plus, VShmupExtraKind.resource_plus};
+      spawnExtra(VShmupSpawnExtra(position.x, position.y, 20, which));
     }
     return false;
   }
