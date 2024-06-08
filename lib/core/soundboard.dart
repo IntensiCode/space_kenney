@@ -9,6 +9,7 @@ enum Sound {
   explosion,
   mining_laser,
   strangeness,
+  warning,
 }
 
 final soundboard = Soundboard();
