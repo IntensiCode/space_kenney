@@ -62,7 +62,11 @@ class InputAcceleration {
     if (velocity.abs() > _velocityMax) velocity = _velocityMax * velocity.sign;
 
     position += velocity * dt;
-    if (position.abs() > _positionLimit - _hardBound) position = (_positionLimit - _hardBound) * position.sign;
+    if (position.abs() > _positionLimit - _hardBound) {
+      position = (_positionLimit - _hardBound) * position.sign;
+    } else if (position.abs() > _positionLimit - _softBound) {
+      position = (position.abs() - dt * _velocityMax / 10) * position.sign;
+    }
 
     if (velocity == vxOld) velocity *= 0.9;
     if (velocity.abs() < 0.1) velocity = 0;
