@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:space_kenney/vshmup/vshmup_asteroids.dart';
+import 'package:space_kenney/vshmup/vshmup_extras.dart';
 import 'package:space_kenney/vshmup/vshmup_game_keys.dart';
 import 'package:space_kenney/vshmup/vshmup_moons.dart';
 
@@ -20,6 +21,7 @@ class Chapter1_Level1 extends DirectScriptComponent
     backgroundMusic('galactic_dreamers.mp3');
     stars();
     moons();
+    extras();
     at(1, () => subtitles(_kay1, 10, image: kay, audio: 'c1_l1_kay_1.ogg'));
     at(10.5, () => subtitles(_kenney1, 3, image: kenney, audio: 'c1_l1_kenney_1.mp3'));
     at(3, () => hint(_miningLaser, 10));
