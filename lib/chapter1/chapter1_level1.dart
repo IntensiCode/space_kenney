@@ -5,11 +5,14 @@ import 'package:space_kenney/vshmup/vshmup_game_keys.dart';
 import 'package:space_kenney/vshmup/vshmup_moons.dart';
 
 import '../core/common.dart';
+import '../core/messaging.dart';
 import '../story/direct_script_component.dart';
 import '../vshmup/vshmup_player.dart';
 import '../vshmup/vshmup_stars.dart';
 
-class Chapter1_Level1 extends DirectScriptComponent with HasCollisionDetection, KeyboardHandler, TapCallbacks {
+class Chapter1_Level1 extends DirectScriptComponent
+    with Messaging, HasCollisionDetection, KeyboardHandler, TapCallbacks {
+  //
   @override
   onLoad() async {
     collisions = collisionDetection;
