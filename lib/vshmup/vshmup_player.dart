@@ -41,6 +41,10 @@ class VShmupPlayer extends PositionComponent
 
   var _state = _PlayerState.incoming;
 
+  double shield = 80;
+  double energy = 50;
+  double resources = 30;
+
   @override
   void onLoad() async {
     priority = 100;
