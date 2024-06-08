@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/animation.dart';
+import 'package:signals_core/signals_core.dart';
 import 'package:space_kenney/util/auto_dispose.dart';
 import 'package:space_kenney/vshmup/vshmup_asteroids.dart';
 
@@ -9,6 +10,7 @@ import '../story/script_functions.dart';
 import '../util/input_acceleration.dart';
 import 'vshmup_game_keys.dart';
 import 'vshmup_mining_laser.dart';
+import 'vshmup_weapon_system.dart';
 
 enum _PlayerState {
   incoming,
@@ -36,8 +38,9 @@ class VShmupPlayer extends PositionComponent
   late SpriteAnimationComponent ship;
   late SpriteAnimationComponent booster;
 
-  // TODO weapon system instead! also: hud!
-  late Component _primaryWeapon;
+  final weaponSystem = VShmupWeaponSystem();
+
+  Component? _activeWeapon;
 
   var _state = _PlayerState.incoming;
 
@@ -46,10 +49,22 @@ class VShmupPlayer extends PositionComponent
   double resources = 30;
 
   @override
+  void onMount() {
+    autoDispose('activeWeapon', effect(() {
+      _activeWeapon?.removeFromParent();
+      final kind = weaponSystem.activeWeapon;
+      switch (kind) {
+        case VShmupWeaponKind.mining_laser:
+          parent!.add(_activeWeapon = VShmupMiningLaser(this, this)); // TODO STATE
+        default:
+          throw 'unknown weapon kind: $kind';
+      }
+    }));
+  }
+
+  @override
   void onLoad() async {
     priority = 100;
-
-    parent!.add(_primaryWeapon = VShmupMiningLaser(this, this));
 
     final shipFrames = await loadAnimWH('vshmup/player.png', 64, 64);
     add(ship = makeAnimXY(shipFrames, 0, 0)..playing = false);

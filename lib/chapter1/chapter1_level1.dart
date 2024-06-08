@@ -8,8 +8,10 @@ import 'package:space_kenney/vshmup/vshmup_moons.dart';
 import '../core/common.dart';
 import '../core/messaging.dart';
 import '../story/direct_script_component.dart';
+import '../vshmup/vshmup_hud.dart';
 import '../vshmup/vshmup_player.dart';
 import '../vshmup/vshmup_stars.dart';
+import '../vshmup/vshmup_weapon_system.dart';
 
 class Chapter1_Level1 extends DirectScriptComponent
     with Messaging, HasCollisionDetection, KeyboardHandler, TapCallbacks {
@@ -25,7 +27,12 @@ class Chapter1_Level1 extends DirectScriptComponent
     at(1, () => subtitles(_kay1, 10, image: kay, audio: 'c1_l1_kay_1.ogg'));
     at(10.5, () => subtitles(_kenney1, 3, image: kenney, audio: 'c1_l1_kenney_1.mp3'));
     at(3, () => hint(_miningLaser, 10));
-    at(3, () => add(VShmupPlayer()));
+    at(3, () {
+      final player = VShmupPlayer();
+      player.weaponSystem.activeWeapon = VShmupWeaponKind.mining_laser;
+      add(player);
+      add(VShmupHud(player));
+    });
     at(2, () => asteroids());
   }
 
