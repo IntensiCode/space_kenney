@@ -24,10 +24,10 @@ class Chapter1_Level1 extends DirectScriptComponent
     stars();
     moons();
     extras();
-    at(1, () => subtitles(_kay1, 10, image: kay, audio: 'c1_l1_kay_1.ogg'));
-    at(10.5, () => subtitles(_kenney1, 3, image: kenney, audio: 'c1_l1_kenney_1.mp3'));
-    at(3, () => hint(_miningLaser, 10));
-    at(3, () {
+    // at(1, () => subtitles(_kay1, 10, image: kay, audio: 'c1_l1_kay_1.ogg'));
+    // at(10.5, () => subtitles(_kenney1, 3, image: kenney, audio: 'c1_l1_kenney_1.mp3'));
+    at(0, () => hint(_miningLaser, 10));
+    at(0, () {
       final player = VShmupPlayer();
       player.weaponSystem.activeWeapon = VShmupWeaponKind.mining_laser;
       add(player);
